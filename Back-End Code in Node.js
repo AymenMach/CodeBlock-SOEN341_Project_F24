@@ -1,6 +1,10 @@
 // Back-End Code in Node.js
 
+const express = require('express');
 const http = require ('http')
+
+const app = express();
+app.use(express.json());
 
 // server creation
 const server = http.createServer((request, response) => {
@@ -23,8 +27,9 @@ const server = http.createServer((request, response) => {
                           
 
 // server responds with hello node js
-server.listen(3000)
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
 
 // node index.js
 // visit port 3000
-// localhost 3000
