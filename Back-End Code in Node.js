@@ -1,9 +1,11 @@
 // Back-End Code in Node.js
 
 const express = require('express');
-const mongoose = reqiore("mongoose"); 
+const mongoose = require('mongoose'); 
 const app = express();
+const cors = require("cors");
 app.use(express.json());
+app.use(cors());
 
 
 // server creation
