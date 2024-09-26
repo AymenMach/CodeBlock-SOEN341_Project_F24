@@ -1,8 +1,8 @@
-// Front-End Code for Project in React
+
 
 
 import React, { useState } from 'react';
-import './App.css'; // Assuming you have a CSS file for styling
+import './App.css'; 
 
 const PeerAssessment = () => {
   const [isStudent, setIsStudent] = useState(false);
