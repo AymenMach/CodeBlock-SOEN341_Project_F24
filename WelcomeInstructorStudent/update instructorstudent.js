@@ -10,22 +10,41 @@ const PeerAssessment = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
-    const response = await fetch('/api/users/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
+const handleStudentChange = () => {
+    setIsStudent(!isStudent);
+    if (isInstructor) setIsInstructor(false);
+  };
 
-    const data = await response.json();
-    if (response.ok) {
+  const handleInstructorChange = () => {
+    setIsInstructor(!isInstructor);
+    if (isStudent) setIsStudent(false);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        alert(errorData.message || 'Login failed');
+        return;
+      }
+
+      const data = await response.json(); 
+      console.log('Login successful:', data);
+
       if (data.role === 'instructor') {
         navigate('/instructor-page');
       } else if (data.role === 'student') {
         navigate('/student-page');
       }
-    } else {
-      alert('Invalid credentials');
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('An error occurred during login.');
     }
   };
 
