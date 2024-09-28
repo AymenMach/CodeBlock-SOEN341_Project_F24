@@ -1,12 +1,12 @@
-const group = require('group');
-const user = require('user');
+const Group = require('./models/Group');
+const User = require('./models/User');
 
-const create = async (req, res) => {
-  const {groupname} = req.body;
+const createGroup = async (req, res) => {
+  const {groupName} = req.body;
   try {
-    const group = new Group({name: groupname}); 
+    const group = new Group({name: groupName}); 
     await group.save();
-    res.status(201).json(group_;
+    res.status(201).json(group);
   }
   catch (error) {
     res.status(500).json({message: 'Error group creation'});
@@ -27,4 +27,4 @@ const assignStudent = async (req, body) => {
   }
 };
 
-module.exports = {create, assignStudent};
+module.exports = {createGroup, assignStudent};
