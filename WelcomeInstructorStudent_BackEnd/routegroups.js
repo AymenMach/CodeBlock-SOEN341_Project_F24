@@ -1,5 +1,5 @@
 const express = require('express');
-const group = require('group');
+const Group = require('./models/Group');
 const router = express.Router();
 
 router.get('/groups', async (req, res) => {
