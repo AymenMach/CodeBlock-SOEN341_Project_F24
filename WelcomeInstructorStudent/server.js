@@ -6,3 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 
 const app = express();
+
+app.use(express.json());
+app.use(cors());
+
