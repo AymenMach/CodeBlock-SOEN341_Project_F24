@@ -2,11 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const User = require('./models/User');
-const Group = require('.models/Group');
-const {parseCSVAndStoreData} = require('./utils/csvParser');
-const groupRoutes = require('./routes/routegroups');
-const { createGroup, assignStudent } = require('./controllers/creategroup');
+const groupRoutes = require('./routes/routeGroups');
+const userRoutes = require('./routes/userRoutes');
 
 require('dotenv').config();
 const app = express();
@@ -18,17 +15,10 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
 
-const importCSV = async () => {
-  const csvFilePath = './public.student.csv';
-  parseCSVAndStoreData(csvFilePath);
-};
-
 importCSV();
 
-app.use('/api/groups', groupRoutes);
-
-app.post('/api/groups/create', createGroup);
-app.post('/api/groups/assign', assignStudent);
+app.use('/api/users', userRoutes);
+app.use('/api/groups', groupRoutes); 
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
