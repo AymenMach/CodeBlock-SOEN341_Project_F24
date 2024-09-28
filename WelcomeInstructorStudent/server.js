@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const groupRoutes = require('./routes/routegroups'); 
 const userRoutes = require('./routes/userRoutes'); 
-const { parseCSVAndStoreData } = require('./utils/csvParser'); 
+const {parseCSVAndStoreData} = require('./utils/csvParser');
 
 require('dotenv').config();
 const app = express();
