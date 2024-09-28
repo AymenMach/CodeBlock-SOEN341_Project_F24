@@ -142,6 +142,7 @@ const GroupManagement = () => {
   );
 };
 // end of instructor page
+
 // start of student page
 const StudentPage = () => {
   console.log('Rendering StudentPage');
