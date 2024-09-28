@@ -1,9 +1,19 @@
-const express = require('express');
-const { loginUser } = require('../controllers/userController'); // Make sure the path is correct
+const User = require('../models/User'); 
 
-const router = express.Router();
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
 
-// Define the login route
-router.post('/login', loginUser);
+  try {
+    const user = await User.findOne({ username, password });
 
-module.exports = router;
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    return res.status(200).json({ role: user.role, username: user.username });
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { loginUser }; 
