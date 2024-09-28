@@ -4,7 +4,6 @@ import './App.css';
 
 // start of welcome page
 const PeerAssessment = () => {
-  console.log('Rendering PeerAssessment');
   const [isStudent, setIsStudent] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [username, setUsername] = useState('');
@@ -22,9 +21,23 @@ const PeerAssessment = () => {
     if (isStudent) setIsStudent(false);
   };
 
-  const fetchgroups = async () =>  {
-    const response = await fetch('/api/groups');
-    return await response.json();
+  const handleSubmit = async () => {
+    const response = await fetch('/api/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      if (data.role === 'instructor') {
+        navigate('/instructor-page');
+      } else if (data.role === 'student') {
+        navigate('/student-page');
+      }
+    } else {
+      alert('Invalid credentials or role');
+    }
   };
 
   return (
@@ -78,80 +91,90 @@ const PeerAssessment = () => {
 
 // start of instructor page
 const GroupManagement = () => {
-  console.log('Rendering GroupManagement');
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
 
-  const handleCreateGroup = () => {
-    const newGroup = {
-      name: newGroupName,
-      participants: [],
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const response = await fetch('/api/groups');
+      const groupsData = await response.json();
+      setGroups(groupsData);
     };
-    setGroups([...groups, newGroup]);
-    setNewGroupName('');
-  };
+    fetchGroups();
+  }, []);
 
-  const handleAddParticipant = (groupIndex) => {
-    const participantName = prompt('Enter participant name:');
-    if (participantName) {
-      const updatedGroups = [...groups];
-      updatedGroups[groupIndex].participants.push(participantName);
-      setGroups(updatedGroups);
+  const handleCreateGroup = async () => {
+    const response = await fetch('/api/groups/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ groupname: newGroupName })
+    });
+
+    if (response.ok) {
+      const newGroup = await response.json();
+      setGroups([...groups, newGroup]);
+      setNewGroupName('');
+    } else {
+      alert('Error creating group');
     }
   };
 
-  const groupPage = ({ isInstructor }) => {
-  const [groups, setGroups] = useState([]);
+  const handleAddParticipant = async (groupIndex) => {
+    const participantName = prompt('Enter participant name:');
+    if (participantName) {
+      const groupId = groups[groupIndex]._id;
+      const response = await fetch('/api/groups/assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ groupID: groupId, studentID: participantName })
+      });
 
-  useEffect(() => {
-    const getGroups = async () => {
-    const groupData = await fetchGroups();
-    setGroups(groupsData);
-    };
-    getGroups();
-  }, []);
-
-    const createGroup = async (groupName) => {
-  const response = await fetch('/api/groups/create', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ groupName }),
-  });
-  if (response.ok) {
-    fetchGroups();
-  }
-};
-
-const assignStudent = async (groupId, studentId) => {
-  const response = await fetch('/api/groups/assign', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ groupId, studentId }),
-  });
-  if (response.ok) {
-    fetchGroups();
-  }
-};
+      if (response.ok) {
+        const updatedGroup = await response.json();
+        const updatedGroups = [...groups];
+        updatedGroups[groupIndex] = updatedGroup;
+        setGroups(updatedGroups);
+      } else {
+        alert('Error assigning student to group');
+      }
+    }
+  };
 
   return (
-    <div>
-      <h1>Groups</h1>
-      {groups.map(group => (
-        <div key={group._id}>
+    <div className="group-management">
+      <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
+      <h1>Group Management</h1>
+      <div className="create-group">
+        <label>
+          Group name:
+          <input
+            type="text"
+            value={newGroupName}
+            onChange={(e) => setNewGroupName(e.target.value)}
+          />
+        </label>
+        <button onClick={handleCreateGroup}>Create a new group</button>
+      </div>
+      {groups.map((group, index) => (
+        <div key={index} className="group">
           <h2>{group.name}</h2>
-          <ul>
-            {group.students.map(student => (
-              <li key={student._id}>{student.username}</li>
-            ))}
-          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Participants</th>
+              </tr>
+            </thead>
+            <tbody>
+              {group.students.map((participant, pIndex) => (
+                <tr key={pIndex}>
+                  <td>{participant.username}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={() => handleAddParticipant(index)}>Add a participant</button>
         </div>
       ))}
-      {isInstructor && (
-        <>
-          <button onClick={/* Create Group Logic */}>Create Group</button>
-          <button onClick={/* Assign Students Logic */}>Assign Students</button>
-        </>
-      )}
     </div>
   );
 };
@@ -159,43 +182,36 @@ const assignStudent = async (groupId, studentId) => {
 
 // start of student page
 const StudentPage = () => {
-  console.log('Rendering StudentPage');
-  
-  const GroupsPage = ({ isInstructor }) => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    const getGroups = async () => {
-    const groupsData = await fetchGroups();
-    setGroups(groupsData);
+    const fetchGroups = async () => {
+      const response = await fetch('/api/groups');
+      const groupsData = await response.json();
+      setGroups(groupsData);
     };
-    getGroups();
+    fetchGroups();
   }, []);
-  
-    return (
-    <div>
+
+  return (
+    <div className="student-page">
+      <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
       <h1>Groups</h1>
-      {groups.map(group => (
+      {groups.map((group) => (
         <div key={group._id}>
           <h2>{group.name}</h2>
           <ul>
-            {group.students.map(student => (
+            {group.students.map((student) => (
               <li key={student._id}>{student.username}</li>
             ))}
           </ul>
         </div>
       ))}
-      {isInstructor && (
-        <>
-          <button onClick={/* Create Group Logic */}>Create Group</button>
-          <button onClick={/* Assign Students Logic */}>Assign Students</button>
-        </>
-      )}
     </div>
   );
 };
-
 // end of student page
+
 const App = () => {
   return (
     <Router>
@@ -208,7 +224,4 @@ const App = () => {
   );
 };
 
-const StudentPage = () => <GroupPage isInstructor={false} />;
-const InstructorPage = () => <GroupPage isInstructor={true} />;
-
-export { StudentPage, InstructorPage };
+export default App;
