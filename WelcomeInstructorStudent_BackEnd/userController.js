@@ -1,5 +1,3 @@
-const User = require('../models/User'); 
-
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
 
@@ -10,10 +8,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+  
     return res.status(200).json({ role: user.role, username: user.username });
   } catch (error) {
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' }); 
   }
 };
-
-module.exports = { loginUser }; 
