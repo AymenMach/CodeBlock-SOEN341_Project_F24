@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+
 const groupSchema = new mongoose.Schema ({
-  name: { type: String, require: true },
-  students: [{ type: mongoose.Schema.Types.ObjectID, ref: 'user' }]
+  name: {type: String, required: true },
+  students: [{type: mongoose.Schema.Types.ObjectID, ref: 'User' }]
 }];
 
-module.exports = mongoose.model('group', groupSchema);
+module.exports = mongoose.model('Group', groupSchema);
