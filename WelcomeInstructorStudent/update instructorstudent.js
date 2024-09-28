@@ -21,32 +21,36 @@ const handleStudentChange = () => {
   };
 
   const handleSubmit = async () => {
-    try {
-      const response = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
+  try {
+    const response = await fetch('/api/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json(); 
-        alert(errorData.message || 'Login failed');
-        return;
-      }
-
-      const data = await response.json(); 
-      console.log('Login successful:', data);
-
-      if (data.role === 'instructor') {
-        navigate('/instructor-page');
-      } else if (data.role === 'student') {
-        navigate('/student-page');
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      alert('An error occurred during login.');
+    // Check if the response is OK (status 200)
+    if (!response.ok) {
+      // Attempt to parse error message as JSON, otherwise show a generic error
+      const errorData = await response.json().catch(() => null);
+      alert(errorData?.message || 'Login failed');
+      return;
     }
-  };
+
+    // Parse the successful JSON response
+    const data = await response.json();
+    console.log('Login successful:', data);
+
+    // Navigate to the respective page based on the user's role
+    if (data.role === 'instructor') {
+      navigate('/instructor-page');
+    } else if (data.role === 'student') {
+      navigate('/student-page');
+    }
+  } catch (error) {
+    console.error('Error logging in:', error);
+    alert('An error occurred during login.');
+  }
+};
 
   return (
     <div className="peer-assessment">
