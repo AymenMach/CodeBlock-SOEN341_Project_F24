@@ -17,3 +17,7 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
 app.use('/api/users', userRoutes);
 app.use('/api/groups', groupRoutes);
 
+const port = process.env.port || 3000;
+app.listen(3000, () => {
+  console.log('Server running on port 3000);
+});
