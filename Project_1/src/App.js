@@ -18,17 +18,11 @@ const PeerAssessment = () => {
       body: JSON.stringify({ username, password }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      alert(errorData?.message || 'Login failed');
-      return;
-    }
-
     const data = await response.json();
     console.log('Login successful:', data);
 
     if (data.role === 'instructor') {
-      navigate('/instructor-page');
+    navigate('/instructor-page');
     } else {
       navigate('/instructor-page');
     }
@@ -37,7 +31,16 @@ const PeerAssessment = () => {
     alert('An error occurred during login.');
   }
 };
+  
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      alert(errorData?.message || 'Login failed');
+      return;
+    }
 
+const StudentPage = () => <GroupPage isInstructor={false} />;
+const InstructorPage = () => <GroupPage isInstructor={true} />;
+  
   return (
     <div className="peer-assessment">
       <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
@@ -66,35 +69,6 @@ const PeerAssessment = () => {
   );
 };
 
-// instructor and student group page
-const GroupPage = ({ isInstructor }) => {
-  const [groups, setGroups] = useState([]);
-
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/groups');
-        
-        // Check if the response is OK (status code 200)
-        if (!response.ok) {
-          const errorText = await response.text(); // Get the raw response as text
-          console.error('Error fetching groups:', errorText);
-          alert('Failed to fetch groups. Please check the console for more details.');
-          return;
-        }
-
-        // Parse the response as JSON
-        const groupsData = await response.json();
-        setGroups(groupsData);
-      } catch (error) {
-        console.error('Error parsing JSON:', error);
-        alert('An error occurred while fetching groups. Please try again.');
-      }
-    };
-
-    fetchGroups();
-  }, []);
-
   return (
     <div>
       <h1>Groups</h1>
@@ -118,9 +92,34 @@ const GroupPage = ({ isInstructor }) => {
   );
 };
 
-const StudentPage = () => <GroupPage isInstructor={false} />;
-const InstructorPage = () => <GroupPage isInstructor={true} />;
-
+// instructor and student group page
+  const GroupPage = ({ isInstructor }) => {
+  const [groups, setGroups] = useState([]);
+  
+  useEffect(() => {
+  const fetchGroups = async () => {
+   try {
+     const response = await fetch('http://localhost:5000/api/groups');
+        
+       // Check if the response is OK (status code 200)
+       if (!response.ok) {
+        const errorText = await response.text(); 
+        console.error('Error fetching groups:', errorText);
+        alert('Failed to fetch groups.');
+        return;
+        }
+     
+        // Parse the response as JSON
+        const groupsData = await response.json();
+        setGroups(groupsData);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+        alert('An error occurred.');
+      }
+    };
+    fetchGroups();
+  }, []);
+          
 const App = () => {
   return (
     <Router>
