@@ -2,7 +2,7 @@ const express = require('express');
 const Group = require('../models/Group'); 
 const router = express.Router();
 
-router.get('/groups', async (req, res) => {
+router.get('/Groups', async (req, res) => {
   try {
     const groups = await Group.find().populate('students', 'username');
     res.status(200).json(groups);
