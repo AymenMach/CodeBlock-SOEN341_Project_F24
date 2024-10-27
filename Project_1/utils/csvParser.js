@@ -1,45 +1,40 @@
+// csvParser.js
 const fs = require('fs');
 const csv = require('csv-parser');
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
-const parseCSVAndStoreData = async (csvFilePath) => {
-  try {
-    const users = [];
+const parseCSVAndStoreData = (csvFilePath) => {
+  fs.createReadStream(csvFilePath)
+    .pipe(csv())
+    .on('data', async (row) => {
+      const { username, password, role, group } = row;
 
-    fs.createReadStream(csvFilePath)
-      .pipe(csv())
-      .on('data', async (row) => {
-        const { username, password, role, group } = row;
+      if (!username || !password || !role) {
+        console.error('Error: Missing fields in row:', row);
+        return;
+      }
 
-        // Validate that all required fields are present
-        if (!username || !password || !role) {
-          console.error('Error processing row:', row);
-          return;
-        }
-
-        // Check if the user already exists before inserting
+      try {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
-          console.log('User ${username} already exists, skipping.');
+          console.log(`User ${username} already exists, skipping.`);
         } else {
+          const hashedPassword = await bcrypt.hash(password, 10);
           const newUser = new User({
             username,
-            password,
-            role, // Ensure role is saved
-            group // Ensure group is saved
+            password: hashedPassword,
+            role,
+            group
           });
-
           await newUser.save();
-          console.log('Inserted user ${username}');
+          console.log(`Inserted user ${username}`);
         }
-      })
-      .on('end', () => {
-        console.log('CSV file successfully processed');
-      });
-  } catch (error) {
-    console.error('Error processing CSV file:', error);
-  }
+      } catch (error) {
+        console.error('Error saving user:', error);
+      }
+    })
+    .on('end', () => console.log('CSV file processed successfully'));
 };
 
 module.exports = { parseCSVAndStoreData };
-
