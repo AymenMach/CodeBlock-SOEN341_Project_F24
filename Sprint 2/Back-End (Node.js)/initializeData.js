@@ -45,4 +45,4 @@ const importCSV = async (filePath) => {
     });
 };
 
-importCSV('./data/roster.csv');
+importCSV('./data/courseRoster.csv');
