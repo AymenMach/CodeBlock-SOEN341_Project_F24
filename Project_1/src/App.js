@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
-// start of welcome page
+// Welcome/Login Page Component
 const PeerAssessment = () => {
   const [isStudent, setIsStudent] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
@@ -11,36 +11,27 @@ const PeerAssessment = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-  try {
-    const response = await fetch('http://localhost:5000/api/users/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
 
-    const data = await response.json();
-    console.log('Login successful:', data);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
 
-    if (data.role === 'instructor') {
-    navigate('/instructor-page');
-    } else {
-      navigate('/instructor-page');
+      if (data.role === 'instructor') {
+        navigate('/instructor-page');
+      } else if (data.role === 'student') {
+        navigate('/student-page');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(error.message);
     }
-  } catch (error) {
-    console.error('Error logging in:', error);
-    alert('An error occurred during login.');
-  }
-};
-  
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      alert(errorData?.message || 'Login failed');
-      return;
-    }
+  };
 
-const StudentPage = () => <GroupPage isInstructor={false} />;
-const InstructorPage = () => <GroupPage isInstructor={true} />;
-  
   return (
     <div className="peer-assessment">
       <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
@@ -69,6 +60,26 @@ const InstructorPage = () => <GroupPage isInstructor={true} />;
   );
 };
 
+// Group Page Component shared by Instructor and Student
+const GroupPage = ({ isInstructor }) => {
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/groups');
+        if (!response.ok) throw new Error('Failed to fetch groups');
+        
+        const groupsData = await response.json();
+        setGroups(groupsData);
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+        alert('Failed to fetch groups.');
+      }
+    };
+    fetchGroups();
+  }, []);
+
   return (
     <div>
       <h1>Groups</h1>
@@ -92,34 +103,11 @@ const InstructorPage = () => <GroupPage isInstructor={true} />;
   );
 };
 
-// instructor and student group page
-  const GroupPage = ({ isInstructor }) => {
-  const [groups, setGroups] = useState([]);
-  
-  useEffect(() => {
-  const fetchGroups = async () => {
-   try {
-     const response = await fetch('http://localhost:5000/api/groups');
-        
-       // Check if the response is OK (status code 200)
-       if (!response.ok) {
-        const errorText = await response.text(); 
-        console.error('Error fetching groups:', errorText);
-        alert('Failed to fetch groups.');
-        return;
-        }
-     
-        // Parse the response as JSON
-        const groupsData = await response.json();
-        setGroups(groupsData);
-      } catch (error) {
-        console.error('Error parsing JSON:', error);
-        alert('An error occurred.');
-      }
-    };
-    fetchGroups();
-  }, []);
-          
+// Instructor and Student Page Components
+const InstructorPage = () => <GroupPage isInstructor={true} />;
+const StudentPage = () => <GroupPage isInstructor={false} />;
+
+// Main App Component with Routes
 const App = () => {
   return (
     <Router>
