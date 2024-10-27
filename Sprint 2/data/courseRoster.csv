@@ -1,1 +1,8 @@
-
+username,password,name,role
+student1,password1,John,student
+student2,password2,Jane,student
+student3,password3,Jack,student
+student4,password4,Johnny,student
+student5,password5,Jake,student
+student6,password6,Jacob,student
+instructor1,password123,Smith,instructor
