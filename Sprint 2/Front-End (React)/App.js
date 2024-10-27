@@ -2,82 +2,56 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import InstructorDashboard from './InstructorDashboard';
+import StudentDashboard from './StudentDashboard';
 
-const PeerAssessment = () => {
+const App = () => {
   const [isStudent, setIsStudent] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  // Handle role selection
   const handleStudentChange = () => {
-    setIsStudent(true);
-    setIsInstructor(false);
+    setIsStudent(!isStudent);
+    if (isInstructor) setIsInstructor(false);
   };
 
   const handleInstructorChange = () => {
-    setIsInstructor(true);
-    setIsStudent(false);
+    setIsInstructor(!isInstructor);
+    if (isStudent) setIsStudent(false);
   };
 
-  // Handle login action
   const handleSubmit = () => {
-    // Placeholder login validation: here, any username/password is accepted
-    if (isStudent) {
-      navigate('/student-page');
-    } else if (isInstructor) {
-      navigate('/instructor-page');
+    if (isInstructor) {
+      navigate('/instructor-dashboard');
+    } else if (isStudent) {
+      navigate('/student-dashboard');
     } else {
-      alert('Please select a role');
+      alert('Invalid credentials or role');
     }
   };
 
   return (
     <div className="peer-assessment">
-      <img
-        src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg"
-        alt="Concordia University Logo"
-        className="logo concordia-logo"
-      />
+      <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
       <div className="content">
         <h1>PEER ASSESSMENT SYSTEM</h1>
         <div className="checkbox-group">
+          <label>Are you a(n):</label>
           <label>
-            Are you a(n):
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={isStudent}
-              onChange={handleStudentChange}
-            />
+            <input type="checkbox" checked={isStudent} onChange={handleStudentChange} />
             Student
           </label>
           <label>
-            <input
-              type="checkbox"
-              checked={isInstructor}
-              onChange={handleInstructorChange}
-            />
+            <input type="checkbox" checked={isInstructor} onChange={handleInstructorChange} />
             Instructor
           </label>
         </div>
-        {/* Display login form when a role is selected */}
         {(isStudent || isInstructor) && (
           <div className="credentials">
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <button onClick={handleSubmit}>Enter</button>
           </div>
         )}
@@ -86,30 +60,19 @@ const PeerAssessment = () => {
   );
 };
 
-// Basic placeholder components for student and instructor pages
-const StudentPage = () => (
-  <div className="student-page">
-    <h1>Welcome, Student!</h1>
-  </div>
-);
-
-const InstructorPage = () => (
-  <div className="instructor-page">
-    <h1>Welcome, Instructor!</h1>
-  </div>
-);
-
-// Main App Component with routing setup
-const App = () => {
+// Wrapper component to set up routing with App.js as the home page
+const AppWithRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<PeerAssessment />} />
-        <Route path="/student-page" element={<StudentPage />} />
-        <Route path="/instructor-page" element={<InstructorPage />} />
+        <Route path="/" element={<App />} />
+        <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
+        <Route path="/student-dashboard" element={<StudentDashboard />} />
       </Routes>
     </Router>
   );
 };
 
-export default App;
+export default AppWithRoutes;
+
+
