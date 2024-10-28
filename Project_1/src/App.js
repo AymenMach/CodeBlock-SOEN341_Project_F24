@@ -63,13 +63,15 @@ const PeerAssessment = () => {
 // Group Page Component shared by Instructor and Student
 const GroupPage = ({ isInstructor }) => {
   const [groups, setGroups] = useState([]);
+  const [groupName, setGroupName] = useState('');
+  const [studentIds, setStudentIds] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState('');
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/groups');
         if (!response.ok) throw new Error('Failed to fetch groups');
-        
         const groupsData = await response.json();
         setGroups(groupsData);
       } catch (error) {
@@ -80,6 +82,43 @@ const GroupPage = ({ isInstructor }) => {
     fetchGroups();
   }, []);
 
+// Function to create a new group
+  const createGroup = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/groups/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: groupName })
+      });
+      if (!response.ok) throw new Error('Failed to create group');
+      const newGroup = await response.json();
+      setGroups([...groups, newGroup]);
+      setGroupName('');
+      alert('Group created successfully');
+    } catch (error) {
+      console.error('Error creating group:', error);
+      alert('Error creating group');
+    }
+  };
+
+  // Function to assign students to a group
+  const assignStudents = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/groups/assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ groupId: selectedGroup, studentIds: studentIds.split(',') })
+      });
+      if (!response.ok) throw new Error('Failed to assign students');
+      alert('Students assigned successfully');
+      setStudentIds('');
+    } catch (error) {
+      console.error('Error assigning students:', error);
+      alert('Error assigning students');
+    }
+  };
+
+  
   return (
     <div>
       <h1>Groups</h1>
