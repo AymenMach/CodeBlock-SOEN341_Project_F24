@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './DisplayGroups.css';
 
-const DisplayGroups = () => {
+const DisplayGroups = ({ role }) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await fetch('/api/groups');
+        const endpoint = role === 'instructor' ? '/api/groups' : '/api/groups/student';
+        const response = await fetch(endpoint);
         const data = await response.json();
         setGroups(data);
       } catch (error) {
@@ -17,29 +18,12 @@ const DisplayGroups = () => {
         setLoading(false);
       }
     };
-
     fetchGroups();
-  }, []);
-
-  if (loading) {
-    return <div className="display-groups">Loading...</div>;
-  }
+  }, [role]);
 
   return (
     <div className="display-groups">
-      <h2>Group List</h2>
-      <div className="group-list">
-        {groups.map((group) => (
-          <div key={group.id} className="group-item">
-            <div className="group-name">{group.name}</div>
-            <ul>
-              {group.participants.map((participant, index) => (
-                <li key={index}>{participant}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      {loading ? <div>Loading...</div> : groups.map(/* Display logic */)}
     </div>
   );
 };
