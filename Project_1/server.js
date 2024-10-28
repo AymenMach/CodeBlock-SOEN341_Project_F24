@@ -5,7 +5,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { parseCSVAndStoreData } = require('./utils/csvParser');
 const groupRoutes = require('./routes/routegroups');
-const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/auth');
 require('dotenv').config();
 
@@ -23,7 +22,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // Routes
 app.use('/api/groups', groupRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 
 const port = process.env.PORT || 5000;
