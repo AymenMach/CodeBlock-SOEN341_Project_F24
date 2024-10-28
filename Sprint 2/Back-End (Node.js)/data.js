@@ -1,7 +1,7 @@
 const fs = require('fs');
 const csvParser = require('csv-parser');
 const mongoose = require('mongoose');
-const User = require('./models/User');
+const user = require('./models/user');
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/peerAssessment', {
