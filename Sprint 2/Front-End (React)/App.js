@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
@@ -12,23 +11,26 @@ const App = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleStudentChange = () => {
-    setIsStudent(!isStudent);
-    if (isInstructor) setIsInstructor(false);
-  };
+ const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) 
+      });
+      const data = await response.json();
 
-  const handleInstructorChange = () => {
-    setIsInstructor(!isInstructor);
-    if (isStudent) setIsStudent(false);
-  };
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
 
-  const handleSubmit = () => {
-    if (isInstructor) {
-      navigate('/instructor-dashboard');
-    } else if (isStudent) {
-      navigate('/student-dashboard');
-    } else {
-      alert('Invalid credentials or role');
+      if (data.role === 'instructor') {
+        navigate('/instructor-dashboard');
+      } else if (data.role === 'student') {
+        navigate('/student-dashboard');
+      } else {
+        alert('Invalid role');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert(error.message);
     }
   };
 
@@ -74,5 +76,4 @@ const AppWithRoutes = () => {
 };
 
 export default AppWithRoutes;
-
 
