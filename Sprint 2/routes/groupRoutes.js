@@ -19,12 +19,23 @@ router.post('/groups', async (req, res) => {
 });
 
 // Get all groups
-router.get('/groups', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const groups = await Group.find().populate('participants', 'username');
     res.json(groups);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch groups' });
+  }
+});
+
+// Get student's group(s) by student ID
+router.get('/student', async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const groups = await Group.find({ participants: userId }).populate('participants', 'username');
+    res.json(groups);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch student groups' });
   }
 });
 
