@@ -1,8 +1,9 @@
 const express = require('express');
-const Group = require('../models/Group'); 
+const Group = require('../models/Group');
+const user = require('../models/user');
 const router = express.Router();
 
-router.get('/Groups', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const groups = await Group.find().populate('students', 'username');
     res.status(200).json(groups);
@@ -12,3 +13,4 @@ router.get('/Groups', async (req, res) => {
 });
 
 module.exports = router;
+
