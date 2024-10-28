@@ -8,25 +8,16 @@ const parseCSVAndStoreData = (csvFilePath) => {
   fs.createReadStream(csvFilePath)
     .pipe(csv())
     .on('data', async (row) => {
-      const { username, password, role, group } = row;
-
+      const { username, password, role } = row;
       if (!username || !password || !role) {
-        console.error('Error: Missing fields in row:', row);
         return;
       }
 
       try {
         const existingUser = await User.findOne({ username });
-        if (existingUser) {
-          console.log(`User ${username} already exists, skipping.`);
-        } else {
+        if (!existingUser) {
           const hashedPassword = await bcrypt.hash(password, 10);
-          const newUser = new User({
-            username,
-            password: hashedPassword,
-            role,
-            group
-          });
+          const newUser = new User({ username, password: hashedPassword, role });
           await newUser.save();
           console.log(`Inserted user ${username}`);
         }
