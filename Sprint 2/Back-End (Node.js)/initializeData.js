@@ -1,7 +1,7 @@
 const fs = require('fs');
 const csvParser = require('csv-parser');
 const mongoose = require('mongoose');
-const User = require('./models/User');
+const user = require('./models/user');
 
 mongoose.connect('mongodb://localhost:27017/peerAssessment', {
   useNewUrlParser: true,
@@ -9,11 +9,6 @@ mongoose.connect('mongodb://localhost:27017/peerAssessment', {
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch((error) => console.error('MongoDB connection error:', error));
-
-// Helper function to generate a unique student ID
-const generateStudentID = () => {
-  return Math.floor(Math.random() * 100000) + 10000;
-};
 
 // Import CSV data into MongoDB
 const importCSV = async (filePath) => {
