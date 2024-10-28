@@ -4,11 +4,9 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['student', 'instructor'], required: true },
-  group: { type: String } // Optional for students
+  role: { type: String, enum: ['student', 'instructor'], required: true }
 });
 
-// Pre-save hook for hashing password
 userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
