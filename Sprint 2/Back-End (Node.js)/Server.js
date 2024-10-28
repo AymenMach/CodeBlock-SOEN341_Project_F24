@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 
 const app = express();
@@ -20,7 +19,6 @@ app.use('/api/groups', require('./routes/groupRoutes'));
 
 // Set up routes
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/groups', groupRoutes);
 
 // Start the server
