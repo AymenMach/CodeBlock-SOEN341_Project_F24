@@ -1,0 +1,103 @@
+// app.js
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import './App.css';
+
+const PeerAssessmentPage = ({ userId }) => {
+  const { groupId } = useParams();
+  const [teammates, setTeammates] = useState([]);
+  const [selectedTeammate, setSelectedTeammate] = useState('');
+  const [score, setScore] = useState(1);
+  const [feedback, setFeedback] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false); // New state for submission confirmation
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTeammates = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/groups/${groupId}`);
+        if (!response.ok) throw new Error('Failed to fetch teammates');
+        const groupData = await response.json();
+        setTeammates(groupData.participants.filter(participant => participant._id !== userId));
+      } catch (error) {
+        console.error('Error fetching teammates:', error);
+        alert('An error occurred while fetching teammates.');
+      }
+    };
+
+    fetchTeammates();
+  }, [groupId, userId]);
+
+  const handleSubmitAssessment = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/groups/${groupId}/assess`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ evaluatorId: userId, evaluateeId: selectedTeammate, score, feedback }),
+      });
+      if (!response.ok) throw new Error('Failed to submit assessment');
+      setIsSubmitted(true); // Show confirmation message
+    } catch (error) {
+      console.error('Error submitting assessment:', error);
+      alert('An error occurred while submitting the assessment.');
+    }
+  };
+
+  if (isSubmitted) {
+    return (
+      <div className="confirmation-page">
+        <h2>Peer Assessment Submitted</h2>
+        <p>Thank you for completing your peer assessment.</p>
+        <button onClick={() => navigate('/student-page')}>Return to Dashboard</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="peer-assessment-page">
+      <h2>Peer Assessment</h2>
+      <div>
+        <label>Teammate:</label>
+        <select value={selectedTeammate} onChange={(e) => setSelectedTeammate(e.target.value)}>
+          <option value="">Select a teammate</option>
+          {teammates.map(teammate => (
+            <option key={teammate._id} value={teammate._id}>{teammate.username}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label>Cooperation (5-point scale):</label> {/* Specify 5-point scale for Cooperation */}
+        <input
+          type="number"
+          min="1"
+          max="5"
+          value={score}
+          onChange={(e) => setScore(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Additional Feedback:</label>
+        <textarea
+          value={feedback}
+          onChange={(e) => setFeedback(e.target.value)}
+          rows="4"
+          cols="50"
+        />
+      </div>
+      <button onClick={handleSubmitAssessment}>Submit Assessment</button>
+    </div>
+  );
+};
+
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<PeerAssessment />} />
+      <Route path="/instructor-page" element={<GroupManagement />} />
+      <Route path="/student-page" element={<StudentPage />} />
+      <Route path="/peer-assessment/:groupId" element={<PeerAssessmentPage />} />
+    </Routes>
+  </Router>
+);
+
+export default App;
