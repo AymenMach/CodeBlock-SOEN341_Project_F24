@@ -131,36 +131,49 @@ const GroupPage = ({ isInstructor }) => {
   );
 };
 
-// Start of instructor page
 const GroupManagement = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
 
-  const handleCreateGroup = async () => {
-    const newGroup = {
-      name: newGroupName,
-      participants: [],
+  // Fetch existing groups when component mounts
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/groups');
+        if (!response.ok) {
+          throw new Error('Failed to fetch groups');
+        }
+        const groupsData = await response.json();
+        setGroups(groupsData);
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+        alert('An error occurred while fetching groups.');
+      }
     };
-  
+
+    fetchGroups();
+  }, []);
+
+  const handleCreateGroup = async () => {
+    const newGroup = { name: newGroupName, participants: [] };
+
     try {
-      //route for groups
-      const response = await fetch('http://localhost:5000/api/groups/create', { 
+      const response = await fetch('http://localhost:5000/api/groups/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newGroup),
       });
-    
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error creating group:', errorText);
         alert('Failed to create group. Please check the console for more details.');
         return;
       }
-    
-      //add the group
+
       const savedGroup = await response.json();
-      setGroups([...groups, savedGroup]); 
-      setNewGroupName(''); 
+      setGroups([...groups, savedGroup]);
+      setNewGroupName('');
     } catch (error) {
       console.error('Error creating group:', error);
       alert('An error occurred while creating the group.');
@@ -176,18 +189,15 @@ const GroupManagement = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ groupId, participantName }),
         });
-      
-        const responseText = await response.text(); // Get raw response text
-        console.log('Raw response:', responseText); // Log it
-      
+
         if (!response.ok) {
-          const errorData = JSON.parse(responseText); // Parse the error response
+          const errorData = await response.json();
           alert(errorData.message || 'Failed to add participant');
           return;
         }
-      
-        const updatedGroup = JSON.parse(responseText); // Parse the successful response
-        setGroups(groups.map(group => group._id === updatedGroup._id ? updatedGroup : group));
+
+        const updatedGroup = await response.json();
+        setGroups(groups.map(group => (group._id === updatedGroup._id ? updatedGroup : group)));
       } catch (error) {
         console.error('Error adding participant:', error);
         alert('An error occurred while adding the participant.');
@@ -197,7 +207,6 @@ const GroupManagement = () => {
 
   return (
     <div className="group-management">
-      <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
       <h1>Group Management</h1>
       <div className="create-group">
         <label>
@@ -210,8 +219,8 @@ const GroupManagement = () => {
         </label>
         <button onClick={handleCreateGroup}>Create a new group</button>
       </div>
-      {groups.map((group, index) => (
-        <div key={index} className="group">
+      {groups.map(group => (
+        <div key={group._id} className="group">
           <h2>{group.name}</h2>
           <table>
             <thead>
@@ -236,10 +245,58 @@ const GroupManagement = () => {
 
 // Start of student page
 const StudentPage = () => {
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/groups');
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error fetching groups:', errorText);
+          alert('Failed to fetch groups. Please check the console for more details.');
+          return;
+        }
+
+        const groupsData = await response.json();
+        setGroups(groupsData);
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+        alert('An error occurred while fetching groups. Please try again.');
+      }
+    };
+
+    fetchGroups();
+  }, []);
+
   return (
-    <div className="student-page">
+    <div className="group-management">
       <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
       <h1>Groups</h1>
+      {groups.length === 0 ? (
+        <p>No groups available.</p>
+      ) : (
+        groups.map(group => (
+          <div key={group._id} className="group">
+            <h2>{group.name}</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Participants</th>
+                </tr>
+              </thead>
+              <tbody>
+                {group.participants.map((participant, index) => (
+                  <tr key={index}>
+                    <td>{participant}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))
+      )}
     </div>
   );
 };
