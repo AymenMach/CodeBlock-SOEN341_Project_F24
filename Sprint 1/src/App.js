@@ -136,21 +136,62 @@ const GroupManagement = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
 
-  const handleCreateGroup = () => {
+  const handleCreateGroup = async () => {
     const newGroup = {
       name: newGroupName,
       participants: [],
     };
-    setGroups([...groups, newGroup]);
-    setNewGroupName('');
+  
+    try {
+      //route for groups
+      const response = await fetch('http://localhost:5000/api/groups/create', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newGroup),
+      });
+    
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error creating group:', errorText);
+        alert('Failed to create group. Please check the console for more details.');
+        return;
+      }
+    
+      //add the group
+      const savedGroup = await response.json();
+      setGroups([...groups, savedGroup]); 
+      setNewGroupName(''); 
+    } catch (error) {
+      console.error('Error creating group:', error);
+      alert('An error occurred while creating the group.');
+    }
   };
 
-  const handleAddParticipant = (groupIndex) => {
+  const handleAddParticipant = async (groupId) => {
     const participantName = prompt('Enter participant name:');
     if (participantName) {
-      const updatedGroups = [...groups];
-      updatedGroups[groupIndex].participants.push(participantName);
-      setGroups(updatedGroups);
+      try {
+        const response = await fetch('http://localhost:5000/api/groups/add-participant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ groupId, participantName }),
+        });
+      
+        const responseText = await response.text(); // Get raw response text
+        console.log('Raw response:', responseText); // Log it
+      
+        if (!response.ok) {
+          const errorData = JSON.parse(responseText); // Parse the error response
+          alert(errorData.message || 'Failed to add participant');
+          return;
+        }
+      
+        const updatedGroup = JSON.parse(responseText); // Parse the successful response
+        setGroups(groups.map(group => group._id === updatedGroup._id ? updatedGroup : group));
+      } catch (error) {
+        console.error('Error adding participant:', error);
+        alert('An error occurred while adding the participant.');
+      }
     }
   };
 
@@ -186,7 +227,7 @@ const GroupManagement = () => {
               ))}
             </tbody>
           </table>
-          <button onClick={() => handleAddParticipant(index)}>Add a participant</button>
+          <button onClick={() => handleAddParticipant(group._id)}>Add a participant</button>
         </div>
       ))}
     </div>
