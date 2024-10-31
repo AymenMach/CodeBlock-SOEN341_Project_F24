@@ -6,7 +6,7 @@ const router = express.Router();
 // Fetch all groups with populated student usernames
 router.get('/', async (req, res) => {
   try {
-    const groups = await Group.find().populate('students', 'username');
+    const groups = await Group.find();
     res.status(200).json(groups);
   } catch (error) {
     console.error('Error fetching groups:', error);
