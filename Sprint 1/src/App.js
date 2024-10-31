@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import GroupDetailPage from './GroupDetailPage'; // Import the new component
+
 
 // Start of welcome page
 const PeerAssessment = () => {
@@ -84,6 +86,7 @@ const PeerAssessment = () => {
 // Group Page
 const GroupPage = ({ isInstructor }) => {
   const [groups, setGroups] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -108,6 +111,11 @@ const GroupPage = ({ isInstructor }) => {
     fetchGroups();
   }, []);
 
+  const handlePeerAssessment = (groupId) => {
+    console.log(`Initiating peer assessment for group: ${groupId}`);
+    // Implement your peer assessment logic here
+  };
+
   return (
     <div>
       <h1>Groups</h1>
@@ -119,6 +127,7 @@ const GroupPage = ({ isInstructor }) => {
               <li key={student._id}>{student.username}</li>
             ))}
           </ul>
+          <button onClick={() => handlePeerAssessment(group._id)}>Peer Assessment</button>
         </div>
       ))}
       {isInstructor && (
@@ -246,6 +255,7 @@ const GroupManagement = () => {
 // Start of student page
 const StudentPage = () => {
   const [groups, setGroups] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -269,6 +279,12 @@ const StudentPage = () => {
 
     fetchGroups();
   }, []);
+
+  const handlePeerAssessment = (groupId) => {
+    console.log(`Initiating peer assessment for group: ${groupId}`);
+    navigate(`/group/${groupId}`);
+    // Implement your peer assessment logic here
+  };
 
   return (
     <div className="group-management">
@@ -294,6 +310,7 @@ const StudentPage = () => {
                 ))}
               </tbody>
             </table>
+            <button onClick={() => handlePeerAssessment(group._id)}>Peer Assessment</button>
           </div>
         ))
       )}
@@ -310,6 +327,7 @@ const App = () => {
         <Route path="/" element={<PeerAssessment />} />
         <Route path="/instructor-page" element={<GroupManagement />} />
         <Route path="/student-page" element={<StudentPage />} />
+        <Route path="/group/:groupId" element={<GroupDetailPage />} />
       </Routes>
     </Router>
   );
