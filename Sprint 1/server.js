@@ -18,9 +18,10 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error(err));
 
 const importCSV = async () => {
-  const csvFilePath = './data/student.csv'; 
+  const csvFilePath = './data/roster.csv'; 
   parseCSVAndStoreData(csvFilePath);
 };
+
 
 importCSV();
 
