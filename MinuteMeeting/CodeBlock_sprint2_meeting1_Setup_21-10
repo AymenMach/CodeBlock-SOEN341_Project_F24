@@ -1,11 +1,48 @@
-Meeting Minute 1  21-10
-Attendees: Aymen Mahrouhi, Christopher Puran, Nihal Islam, Carlos Guevara, Mohamed Oubagha, Yazdan Syed
+Meeting Title: Sprint 2 - Meeting 1
+Date: October 21, 2023
+Time: 11:30 AM - 1:15 PM
+Sprint: Sprint 2
+Meeting Number: 1
+
+Attendees:
+
+Aymen Mahrouhi
+Christopher Puran
+Nihal Islam
+Carlos Guevara
+Mohamed Oubagha
+Yazdan Syed
 
 
-11:30 : Recap of what was done in sprint 1 and what needs to be completed for sprint 2
+Agenda:
 
-11:45 : Identifying each user story needed for sprint 2
+Recap of Sprint 1 achievements and remaining tasks.
+Identification of user stories for Sprint 2.
+Task allocation and division of work.
+Discussion of implementation strategies for peer assessment functionality.
 
-12:00 : Dividing the work between the work force
 
-13:15 : Discussing how we could implement the peer assessment 
+
+Discussion Details
+11:30 AM: Sprint 1 Recap and Sprint 2 Goals
+Reviewed completed tasks and outstanding items from Sprint 1.
+Identified primary objectives for Sprint 2 to align on project goals.
+
+11:45 AM: User Story Identification for Sprint 2
+Discussed and documented each user story required for Sprint 2, focusing on features like user authentication extensions, team management, and peer assessment.
+
+12:00 PM: Workforce Task Division
+Assigned user stories and corresponding tasks to each team member.
+Each task was entered as a GitHub Issue with the prefix US.## for user stories and Task.## for specific tasks.
+
+1:15 PM: Peer Assessment Implementation Discussion
+Explored potential methods to implement the peer assessment interface.
+Outlined initial approach and agreed on a follow-up meeting to review progress.
+
+
+
+Action Items
+Aymen Mahrouhi: Finalize user stories on GitHub / Draft README file updates for Sprint 2.
+Christopher Puran: Set up GitHub Issues with appropriate prefixes / Work on login functionality enhancements.
+Nihal Islam: Begin initial development on peer assessment interface / Work on login functionality enhancements.
+Mohamed Oubagha: Start setup for continuous integration / Sprint Planning 
