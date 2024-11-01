@@ -82,4 +82,23 @@ router.post('/add-participant', async (req, res) => {
   }
 });
 
+// Add a comment
+router.post('/add-comment', async (req, res) => {
+  const { groupId, studentId, comment } = req.body;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    group.comments.push({ studentId, comment });
+    await group.save();
+    res.status(200).json(group);
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ message: 'Error adding comment' });
+  }
+});
+
 module.exports = router;
