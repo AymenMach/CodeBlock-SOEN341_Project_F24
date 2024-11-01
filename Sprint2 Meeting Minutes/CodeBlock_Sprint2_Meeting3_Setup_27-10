@@ -11,6 +11,7 @@ Aymen Mahrouhi
 Christopher Puran
 Nihal Islam
 Mohamed Oubagha
+Carlos Guevara
 
 
 Agenda:
@@ -42,5 +43,6 @@ Confirmed that the feature should be ready for a demo by the next sprint review.
 Action Items
 Aymen Mahrouhi: Finalize the frontend layout for the peer assessment feature.
 Christopher Puran: Work on backend connections and database setup for peer assessment data / Develop form handling and data submission logic.
-Nihal Islam: Implement the main user interface for the peer assessment / Prepare test cases for peer assessment feature testing.
+Nihal Islam: Implement the main user interface for the peer assessment.
 Mohamed Oubagha: Style the interface to match the agreed design.
+Carlos Guevara: Prepare test cases for peer assessment feature testing.
