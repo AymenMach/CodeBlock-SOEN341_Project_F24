@@ -22,13 +22,15 @@ const PeerAssessment = () => {
     };
 
     const handleSubmit = async () => {
-
+      await fetch('/api/peer-assessment/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ groupId, ratings}),
+      });
+      navigate('/student-page');
     };
 
 
     return (
     <div>
-      <h2>Peer Assessment</h2>
+      <h2>Peer Assessment for Group {groupId}</h2>
       <table>
         {/* Table structure */}
       </table>
