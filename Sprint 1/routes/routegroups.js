@@ -82,6 +82,31 @@ router.post('/add-participant', async (req, res) => {
   }
 });
 
+// Remove a participant from a group
+router.post('/remove-participant', async (req, res) => {
+  const { groupId, participantName } = req.body;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    // Check if the participant exists in the group
+    if (!group.participants.includes(participantName)) {
+      return res.status(400).json({ message: 'Participant not found in the group' });
+    }
+
+    // Remove the participant from the participants array
+    group.participants = group.participants.filter(participant => participant !== participantName);
+    await group.save();
+    res.status(200).json(group);
+  } catch (error) {
+    console.error('Error removing participant:', error);
+    res.status(500).json({ message: 'Failed to remove participant' });
+  }
+});
+
 // Add a comment
 router.post('/add-comment', async (req, res) => {
   const { groupId, studentId, comment } = req.body;
@@ -98,6 +123,21 @@ router.post('/add-comment', async (req, res) => {
   } catch (error) {
     console.error('Error adding comment:', error);
     res.status(500).json({ message: 'Error adding comment' });
+  }
+});
+
+// Delete a group
+router.delete('/:id', async (req, res) => {
+  try {
+      const groupId = req.params.id;
+      const deletedGroup = await Group.findByIdAndDelete(groupId);
+      if (!deletedGroup) {
+          return res.status(404).json({ message: 'Group not found' });
+      }
+      res.status(200).json({ message: 'Group deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting group:', error);
+      res.status(500).json({ message: 'Internal server error' });
   }
 });
 
