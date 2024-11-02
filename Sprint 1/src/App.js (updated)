@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import GroupDetailPage from './GroupDetailPage'; 
+import PeerAssessment from './PeerAssessment'; // Import the new PeerAssessment component
 
 
 // Start of welcome page
@@ -419,6 +420,7 @@ const App = () => {
         <Route path="/instructor-page" element={<GroupManagement />} />
         <Route path="/student-page" element={<StudentPage />} />
         <Route path="/group/:groupId" element={<GroupDetailPage />} />
+        <Route path="/peer-assessment/:groupId" element={<PeerAssessment />} />
       </Routes>
     </Router>
   );
