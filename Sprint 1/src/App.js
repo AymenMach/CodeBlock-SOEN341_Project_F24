@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
-import GroupDetailPage from './GroupDetailPage'; // Import the new component
+import GroupDetailPage from './GroupDetailPage'; 
 
 
 // Start of welcome page
@@ -113,7 +113,7 @@ const GroupPage = ({ isInstructor }) => {
 
   const handlePeerAssessment = (groupId) => {
     console.log(`Initiating peer assessment for group: ${groupId}`);
-    // Implement your peer assessment logic here
+   
   };
 
   return (
@@ -143,11 +143,10 @@ const GroupPage = ({ isInstructor }) => {
 const GroupManagement = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
-  const [users, setUsers] = useState([]); // State to hold the list of users
-  const [selectedUsers, setSelectedUsers] = useState({}); // State to hold selected user for each group
-  const [showDropdown, setShowDropdown] = useState({}); // State to control dropdown visibility for each group
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [showDropdown, setShowDropdown] = useState({}); 
 
-  // Fetch existing groups and users when component mounts
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -165,7 +164,7 @@ const GroupManagement = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users'); 
+        const response = await fetch('http://localhost:5000/api/users');
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }
@@ -178,22 +177,12 @@ const GroupManagement = () => {
     };
 
     fetchGroups();
-    fetchUsers(); 
+    fetchUsers();
   }, []);
 
-  // Filter out users who are already added to any group
-  const unavailableUsers = groups.reduce((acc, group) => {
-    return acc.concat(group.participants);
-  }, []);
-
-  // Update availableUsers to filter by full name instead of username
-  const availableUsers = users.filter(user => 
-    !unavailableUsers.includes(user.name) 
-  );
-
+  // Create a new group
   const handleCreateGroup = async () => {
     const newGroup = { name: newGroupName, participants: [] };
-
     try {
       const response = await fetch('http://localhost:5000/api/groups/create', {
         method: 'POST',
@@ -204,7 +193,7 @@ const GroupManagement = () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error creating group:', errorText);
-        alert('Failed to create group. Please check the console for more details.');
+        alert('Failed to create group.');
         return;
       }
 
@@ -217,8 +206,8 @@ const GroupManagement = () => {
     }
   };
 
+  // Add a participant to a group
   const handleAddParticipant = async (groupId) => {
-    const selectedUser = selectedUsers[groupId];
     if (!selectedUser) {
       alert('Please select a participant.');
       return;
@@ -239,7 +228,7 @@ const GroupManagement = () => {
 
       const updatedGroup = await response.json();
       setGroups(groups.map(group => (group._id === updatedGroup._id ? updatedGroup : group)));
-      setSelectedUsers({ ...selectedUsers, [groupId]: '' }); 
+      setSelectedUser(''); 
       setShowDropdown({ ...showDropdown, [groupId]: false }); 
     } catch (error) {
       console.error('Error adding participant:', error);
@@ -247,8 +236,52 @@ const GroupManagement = () => {
     }
   };
 
-  const toggleDropdown = (groupId) => {
-    setShowDropdown(prev => ({ ...prev, [groupId]: !prev[groupId] }));
+  // Remove a participant from a group
+  const handleRemoveParticipant = async (groupId, participantName) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/groups/remove-participant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ groupId, participantName }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to remove participant');
+        return;
+      }
+
+      const updatedGroup = await response.json();
+      setGroups(groups.map(group => (group._id === updatedGroup._id ? updatedGroup : group)));
+    } catch (error) {
+      console.error('Error removing participant:', error);
+      alert('An error occurred while removing the participant.');
+    }
+  };
+
+  // Remove a group
+  const handleDeleteGroup = async (groupId) => {
+    if (window.confirm('Are you sure you want to delete this group?')) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/groups/${groupId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error deleting group:', errorText);
+          alert('Failed to delete group.');
+          return;
+        }
+
+        
+        setGroups(groups.filter(group => group._id !== groupId));
+        alert('Group deleted successfully.');
+      } catch (error) {
+        console.error('Error deleting group:', error);
+        alert('An error occurred while deleting the group.');
+      }
+    }
   };
 
   return (
@@ -272,30 +305,37 @@ const GroupManagement = () => {
             <thead>
               <tr>
                 <th>Participants</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {group.participants.map((participant, pIndex) => (
                 <tr key={pIndex}>
                   <td>{participant}</td>
+                  <td>
+                    <button onClick={() => handleRemoveParticipant(group._id, participant)}>Remove</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button onClick={() => toggleDropdown(group._id)}>Add a participant</button>
+          <button onClick={() => setShowDropdown({ ...showDropdown, [group._id]: !showDropdown[group._id] })}>
+            {showDropdown[group._id] ? 'Hide' : 'Add a participant'}
+          </button>
           {showDropdown[group._id] && (
             <div className="dropdown">
-              <select 
-                value={selectedUsers[group._id] || ''} 
-                onChange={(e) => setSelectedUsers({ ...selectedUsers, [group._id]: e.target.value })}>
+              <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
                 <option value="">Select a participant</option>
-                {availableUsers.map(user => (
-                  <option key={user._id} value={user.name}>{user.name}</option> 
-                ))}
+                {users
+                  .filter(user => !groups.some(g => g.participants.includes(user.name))) 
+                  .map(user => (
+                    <option key={user._id} value={user.name}>{user.name}</option>
+                  ))}
               </select>
               <button onClick={() => handleAddParticipant(group._id)}>Add</button>
             </div>
           )}
+          <button onClick={() => handleDeleteGroup(group._id)}>Delete Group</button>
         </div>
       ))}
     </div>
@@ -334,7 +374,7 @@ const StudentPage = () => {
   const handlePeerAssessment = (groupId) => {
     console.log(`Initiating peer assessment for group: ${groupId}`);
     navigate(`/group/${groupId}`);
-    // Implement your peer assessment logic here
+    
   };
 
   return (
