@@ -143,8 +143,11 @@ const GroupPage = ({ isInstructor }) => {
 const GroupManagement = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
+  const [users, setUsers] = useState([]); // State to hold the list of users
+  const [selectedUsers, setSelectedUsers] = useState({}); // State to hold selected user for each group
+  const [showDropdown, setShowDropdown] = useState({}); // State to control dropdown visibility for each group
 
-  // Fetch existing groups when component mounts
+  // Fetch existing groups and users when component mounts
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -160,8 +163,33 @@ const GroupManagement = () => {
       }
     };
 
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/users'); 
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const usersData = await response.json();
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        alert('An error occurred while fetching users.');
+      }
+    };
+
     fetchGroups();
+    fetchUsers(); 
   }, []);
+
+  // Filter out users who are already added to any group
+  const unavailableUsers = groups.reduce((acc, group) => {
+    return acc.concat(group.participants);
+  }, []);
+
+  // Update availableUsers to filter by full name instead of username
+  const availableUsers = users.filter(user => 
+    !unavailableUsers.includes(user.name) 
+  );
 
   const handleCreateGroup = async () => {
     const newGroup = { name: newGroupName, participants: [] };
@@ -190,28 +218,37 @@ const GroupManagement = () => {
   };
 
   const handleAddParticipant = async (groupId) => {
-    const participantName = prompt('Enter participant name:');
-    if (participantName) {
-      try {
-        const response = await fetch('http://localhost:5000/api/groups/add-participant', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ groupId, participantName }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          alert(errorData.message || 'Failed to add participant');
-          return;
-        }
-
-        const updatedGroup = await response.json();
-        setGroups(groups.map(group => (group._id === updatedGroup._id ? updatedGroup : group)));
-      } catch (error) {
-        console.error('Error adding participant:', error);
-        alert('An error occurred while adding the participant.');
-      }
+    const selectedUser = selectedUsers[groupId];
+    if (!selectedUser) {
+      alert('Please select a participant.');
+      return;
     }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/groups/add-participant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ groupId, participantName: selectedUser }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || 'Failed to add participant');
+        return;
+      }
+
+      const updatedGroup = await response.json();
+      setGroups(groups.map(group => (group._id === updatedGroup._id ? updatedGroup : group)));
+      setSelectedUsers({ ...selectedUsers, [groupId]: '' }); 
+      setShowDropdown({ ...showDropdown, [groupId]: false }); 
+    } catch (error) {
+      console.error('Error adding participant:', error);
+      alert('An error occurred while adding the participant.');
+    }
+  };
+
+  const toggleDropdown = (groupId) => {
+    setShowDropdown(prev => ({ ...prev, [groupId]: !prev[groupId] }));
   };
 
   return (
@@ -232,7 +269,7 @@ const GroupManagement = () => {
         <div key={group._id} className="group">
           <h2>{group.name}</h2>
           <table>
-            <thead>\
+            <thead>
               <tr>
                 <th>Participants</th>
               </tr>
@@ -245,12 +282,26 @@ const GroupManagement = () => {
               ))}
             </tbody>
           </table>
-          <button onClick={() => handleAddParticipant(group._id)}>Add a participant</button>
+          <button onClick={() => toggleDropdown(group._id)}>Add a participant</button>
+          {showDropdown[group._id] && (
+            <div className="dropdown">
+              <select 
+                value={selectedUsers[group._id] || ''} 
+                onChange={(e) => setSelectedUsers({ ...selectedUsers, [group._id]: e.target.value })}>
+                <option value="">Select a participant</option>
+                {availableUsers.map(user => (
+                  <option key={user._id} value={user.name}>{user.name}</option> 
+                ))}
+              </select>
+              <button onClick={() => handleAddParticipant(group._id)}>Add</button>
+            </div>
+          )}
         </div>
       ))}
     </div>
   );
 };
+
 
 // Start of student page
 const StudentPage = () => {
