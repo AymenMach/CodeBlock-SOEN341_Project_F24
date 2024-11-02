@@ -113,8 +113,7 @@ const GroupPage = ({ isInstructor }) => {
   }, []);
 
   const handlePeerAssessment = (groupId) => {
-    console.log(`Initiating peer assessment for group: ${groupId}`);
-   
+     navigate(`/peer-assessment/${groupId}`);
   };
 
   return (
