@@ -232,7 +232,7 @@ const GroupManagement = () => {
         <div key={group._id} className="group">
           <h2>{group.name}</h2>
           <table>
-            <thead>
+            <thead>\
               <tr>
                 <th>Participants</th>
               </tr>
