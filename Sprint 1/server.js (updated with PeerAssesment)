@@ -1,0 +1,2 @@
+const peerAssessmentRoutes = require('./routes/peerAssessmentRoutes');
+app.use('/api/peer-assessment', peerAssessmentRoutes);
