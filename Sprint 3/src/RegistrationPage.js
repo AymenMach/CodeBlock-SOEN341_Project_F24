@@ -17,20 +17,21 @@ const RegistrationPage = () => {
         body: JSON.stringify({ fullName, username, password }),
       });
 
-      const text = await response.text(); 
-      console.log('Raw response:', text); 
+      const text = await response.text();
+      console.log('Raw response:', text);
+
       if (!response.ok) {
-        // Attempt to parse the response as JSON
+
         try {
           const errorData = JSON.parse(text);
           alert(errorData?.message || 'Registration failed');
         } catch (jsonError) {
-          alert('Registration failed: ' + text); 
+          alert('Registration failed: ' + text);
         }
         return;
       }
 
-      // Handle successful registration
+
       alert('Registration successful!');
       navigate('/');
     } catch (error) {
