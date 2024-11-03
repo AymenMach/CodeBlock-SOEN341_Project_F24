@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 import GroupDetailPage from './GroupDetailPage'; 
+import RegistrationPage from './RegistrationPage';
 
 
 // Start of welcome page
@@ -77,6 +78,9 @@ const PeerAssessment = () => {
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <button onClick={handleSubmit}>Enter</button>
           </div>
+        )}
+        {isStudent && (
+          <button onClick={() => navigate('/register')}>Register</button>
         )}
       </div>
     </div>
@@ -419,6 +423,7 @@ const App = () => {
         <Route path="/instructor-page" element={<GroupManagement />} />
         <Route path="/student-page" element={<StudentPage />} />
         <Route path="/group/:groupId" element={<GroupDetailPage />} />
+        <Route path="/register" element={<RegistrationPage />} /> 
       </Routes>
     </Router>
   );
