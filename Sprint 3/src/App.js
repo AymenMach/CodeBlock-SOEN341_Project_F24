@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import './App.css';
 import GroupDetailPage from './GroupDetailPage'; 
 import RegistrationPage from './RegistrationPage';
+import PeerAssessmentPage from './PeerAssessmentPage';
 
 
 // Start of welcome page
@@ -376,11 +377,11 @@ const StudentPage = () => {
   }, []);
 
   const handlePeerAssessment = (groupId) => {
-    console.log(`Initiating peer assessment for group: ${groupId}`);
-    navigate(`/group/${groupId}`);
+    // Navigate to the Peer Assessment page with the groupId
+    navigate(`/peer-assessment/${groupId}`);
     
   };
-
+  
   return (
     <div className="group-management">
       <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
@@ -423,7 +424,8 @@ const App = () => {
         <Route path="/instructor-page" element={<GroupManagement />} />
         <Route path="/student-page" element={<StudentPage />} />
         <Route path="/group/:groupId" element={<GroupDetailPage />} />
-        <Route path="/register" element={<RegistrationPage />} /> 
+        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/peer-assessment/:groupId" element={<PeerAssessmentPage />} />
       </Routes>
     </Router>
   );
