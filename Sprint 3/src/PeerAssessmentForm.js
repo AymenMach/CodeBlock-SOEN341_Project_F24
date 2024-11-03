@@ -14,7 +14,8 @@ const handleSubmit = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        evaluatedStudent: selectedStudent, cooperationScore, conceptualScore, practicalScore, workEthicScore, conceptualComment, practicalComment, workEthicComment})
+        evaluatedStudent: selectedStudent, cooperationScore, conceptualScore, practicalScore, workEthicScore, conceptualComment, practicalComment, workEthicComment
+      })
     });
 
     if (response.ok) {
