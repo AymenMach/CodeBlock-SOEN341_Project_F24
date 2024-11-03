@@ -10,7 +10,7 @@ const PeerAssessment = () => {
   const [isInstructor, setIsInstructor] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+
   const navigate = useNavigate();
 
   const handleStudentChange = () => {
@@ -55,46 +55,27 @@ const PeerAssessment = () => {
     }
   };
 
-  const handleRegister = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/users/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, name, role: 'student' }), // Hardcoded role to 'student'
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        alert(errorData?.message || 'Registration failed');
-        return;
-      }
-
-      alert('Registration successful! You can now log in.');
-    } catch (error) {
-      console.error('Error registering user:', error);
-      alert('An error occurred during registration.');
-    }
-  };
-
   return (
     <div className="peer-assessment">
       <img src="https://crypto.quebec/wp-content/uploads/2016/03/concordia.jpg" alt="Concordia University Logo" className="logo concordia-logo" />
       <div className="content">
         <h1>PEER ASSESSMENT SYSTEM</h1>
         <div className="checkbox-group">
-          <label>Are you a student?</label>
+          <label>Are you a(n):</label>
           <label>
             <input type="checkbox" checked={isStudent} onChange={handleStudentChange} />
             Student
           </label>
+          <label>
+            <input type="checkbox" checked={isInstructor} onChange={handleInstructorChange} />
+            Instructor
+          </label>
         </div>
-        {isStudent && (
+        {(isStudent || isInstructor) && (
           <div className="credentials">
             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={handleSubmit}>Log In</button>
-            <button onClick={handleRegister}>Register</button>
+            <button onClick={handleSubmit}>Enter</button>
           </div>
         )}
       </div>
@@ -105,7 +86,7 @@ const PeerAssessment = () => {
 // Group Page
 const GroupPage = ({ isInstructor }) => {
   const [groups, setGroups] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -122,7 +103,7 @@ const GroupPage = ({ isInstructor }) => {
         const groupsData = await response.json();
         setGroups(groupsData);
       } catch (error) {
-        console.error('Error fetching groups:', error);
+        console.error('Error parsing JSON:', error);
         alert('An error occurred while fetching groups. Please try again.');
       }
     };
@@ -132,6 +113,7 @@ const GroupPage = ({ isInstructor }) => {
 
   const handlePeerAssessment = (groupId) => {
     console.log(`Initiating peer assessment for group: ${groupId}`);
+   
   };
 
   return (
@@ -148,6 +130,12 @@ const GroupPage = ({ isInstructor }) => {
           <button onClick={() => handlePeerAssessment(group._id)}>Peer Assessment</button>
         </div>
       ))}
+      {isInstructor && (
+        <>
+          <button onClick={() => console.log("Create Group Logic")}>Create Group</button>
+          <button onClick={() => console.log("Assign Students Logic")}>Assign Students</button>
+        </>
+      )}
     </div>
   );
 };
