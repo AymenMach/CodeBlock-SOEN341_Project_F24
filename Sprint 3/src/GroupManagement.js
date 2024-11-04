@@ -75,7 +75,7 @@ const GroupManagement = () => {
       const response = await fetch('http://localhost:5000/api/groups/add-participant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ groupId, participantName: selectedUser }),
+        body: JSON.stringify({ groupId, studentId: selectedUser }), 
       });
 
       if (!response.ok) {
@@ -86,20 +86,20 @@ const GroupManagement = () => {
 
       const updatedGroup = await response.json();
       setGroups(groups.map(group => (group._id === updatedGroup._id ? updatedGroup : group)));
-      setSelectedUser(''); 
-      setShowDropdown({ ...showDropdown, [groupId]: false }); 
+      setSelectedUser('');
+      setShowDropdown({ ...showDropdown, [groupId]: false });
     } catch (error) {
       console.error('Error adding participant:', error);
       alert('An error occurred while adding the participant.');
     }
   };
 
-  const handleRemoveParticipant = async (groupId, participantName) => {
+  const handleRemoveParticipant = async (groupId, studentId) => {
     try {
       const response = await fetch('http://localhost:5000/api/groups/remove-participant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ groupId, participantName }),
+        body: JSON.stringify({ groupId, studentId }), 
       });
 
       if (!response.ok) {
@@ -159,19 +159,25 @@ const GroupManagement = () => {
           <table>
             <thead>
               <tr>
-                <th>Participants</th>
+                <th>Name</th>
+                <th>ID</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {group.participants.map((participant, pIndex) => (
-                <tr key={pIndex}>
-                  <td>{participant}</td>
-                  <td>
-                    <button onClick={() => handleRemoveParticipant(group._id, participant)}>Remove</button>
-                  </td>
-                </tr>
-              ))}
+              {group.participants.map((participantId, pIndex) => {
+                // Find the user based on studentId
+                const user = users.find(user => user.studentId === participantId);
+                return (
+                  <tr key={pIndex}>
+                    <td>{user ? user.name : 'Unknown'}</td> {}
+                    <td>{participantId}</td> {}
+                    <td>
+                      <button onClick={() => handleRemoveParticipant(group._id, participantId)}>Remove</button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           <button onClick={() => setShowDropdown({ ...showDropdown, [group._id]: !showDropdown[group._id] })}>
@@ -182,9 +188,9 @@ const GroupManagement = () => {
               <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
                 <option value="">Select a participant</option>
                 {users
-                  .filter(user => !groups.some(g => g.participants.includes(user.name))) 
+                  .filter(user => !groups.some(g => g.participants.includes(user.studentId))) 
                   .map(user => (
-                    <option key={user._id} value={user.name}>{user.name}</option>
+                    <option key={user._id} value={user.studentId}>{user.studentId}</option> 
                   ))}
               </select>
               <button onClick={() => handleAddParticipant(group._id)}>Add</button>
