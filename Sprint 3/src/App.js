@@ -74,7 +74,7 @@ const PeerAssessment = () => {
       // Role checking logic
       if (isInstructor) {
         navigate('/instructor-page');
-      } else if (isStudent === 'student' && isStudent) {
+      } else if (isStudent) {
         navigate('/student-page');
       } else {
         alert('Role mismatch. Please ensure your selected role matches your credentials.');
