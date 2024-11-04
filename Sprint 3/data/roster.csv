@@ -1,8 +1,7 @@
-username,password,name,role
-student1,password1,John,student
-student2,password2,Jane,student
-student3,password3,Jack,student
-student4,password4,Johnny,student
-student5,password5,Jake,student
-student6,password6,Jacob,student
-instructor,password123,Smith,instructor
+username,password,name,role,studentId
+student1,password1,John,student,4002
+student2,password2,Jane,student,4003
+student3,password3,Jack,student,4004
+student4,password4,Johnny,student,4005
+student5,password5,Jake,student,4006
+student6,password6,Jacob,student,4007
