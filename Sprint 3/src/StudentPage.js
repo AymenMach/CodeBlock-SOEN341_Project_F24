@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const StudentPage = () => {
     const [groups, setGroups] = useState([]);
+    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,11 +26,32 @@ const StudentPage = () => {
             }
         };
 
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/users');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+                const usersData = await response.json();
+                setUsers(usersData);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                alert('An error occurred while fetching users.');
+            }
+        };
+
         fetchGroups();
+        fetchUsers();
     }, []);
 
     const handlePeerAssessment = (groupId) => {
         navigate(`/peer-assessment/${groupId}`);
+    };
+
+    // Function to get user name by ID
+    const getUserNameById = (id) => {
+        const user = users.find(user => user.studentId === id);
+        return user ? user.name : 'Unknown'; 
     };
 
     return (
@@ -45,13 +67,15 @@ const StudentPage = () => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Participants</th>
+                                    <th>Name</th>
+                                    <th>ID</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {group.participants.map((participant, index) => (
+                                {group.participants.map((participantId, index) => (
                                     <tr key={index}>
-                                        <td>{participant}</td>
+                                        <td>{getUserNameById(participantId)}</td>
+                                        <td>{participantId}</td>
                                     </tr>
                                 ))}
                             </tbody>
