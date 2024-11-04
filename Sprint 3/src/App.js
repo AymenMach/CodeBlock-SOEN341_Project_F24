@@ -1,17 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
-import GroupDetailPage from './GroupDetailPage';
 import RegistrationPage from './RegistrationPage';
 import PeerAssessmentPage from './PeerAssessmentPage';
-import GroupPage from './GroupPage';
 import StudentPage from './StudentPage';
 import GroupManagement from './GroupManagement';
 
+// User Context Setup
+const UserContext = createContext();
 
+export const UserProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
 
-// Start of welcome page
+  useEffect(() => {
+    if (currentUser) {
+      console.log('Current User:', currentUser);
+    }
+  }, [currentUser]);
+
+  return (
+    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  return useContext(UserContext);
+};
+
 const PeerAssessment = () => {
+  const { setCurrentUser } = useUser();
   const [isStudent, setIsStudent] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [username, setUsername] = useState('');
@@ -31,7 +50,10 @@ const PeerAssessment = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
+      // Determine the appropriate endpoint based on role
+      const endpoint = isInstructor ? 'http://localhost:5000/api/instructors/login' : 'http://localhost:5000/api/users/login';
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -46,10 +68,13 @@ const PeerAssessment = () => {
       const data = await response.json();
       console.log('Login successful:', data);
 
+      // Set the current user in context
+      setCurrentUser(data);
+
       // Role checking logic
-      if (data.role === 'instructor' && isInstructor) {
+      if (isInstructor) {
         navigate('/instructor-page');
-      } else if (data.role === 'student' && isStudent) {
+      } else if (isStudent === 'student' && isStudent) {
         navigate('/student-page');
       } else {
         alert('Role mismatch. Please ensure your selected role matches your credentials.');
@@ -92,24 +117,21 @@ const PeerAssessment = () => {
   );
 };
 
-
-
-
-
-const InstructorPage = () => <GroupPage isInstructor={true} />;
+const InstructorPage = () => <GroupManagement isInstructor={true} />;
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<PeerAssessment />} />
-        <Route path="/instructor-page" element={<GroupManagement />} />
-        <Route path="/student-page" element={<StudentPage />} />
-        <Route path="/group/:groupId" element={<GroupDetailPage />} />
-        <Route path="/register" element={<RegistrationPage />} />
-        <Route path="/peer-assessment/:groupId" element={<PeerAssessmentPage />} />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<PeerAssessment />} />
+          <Route path="/instructor-page" element={<GroupManagement />} />
+          <Route path="/student-page" element={<StudentPage />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/peer-assessment/:groupId" element={<PeerAssessmentPage />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 };
 
