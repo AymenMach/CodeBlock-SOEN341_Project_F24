@@ -1,41 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+
 import RegistrationPage from './RegistrationPage';
 import PeerAssessmentPage from './PeerAssessmentPage';
 import StudentPage from './StudentPage';
 import GroupManagement from './GroupManagement';
 
-// User Context Setup
-const UserContext = createContext();
-
-export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    if (currentUser) {
-      console.log('Current User:', currentUser);
-    }
-  }, [currentUser]);
-
-  return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-      {children}
-    </UserContext.Provider>
-  );
-};
-
-export const useUser = () => {
-  return useContext(UserContext);
-};
+import { UserProvider, useUser } from './UserContext'; // Import UserContext
 
 const PeerAssessment = () => {
-  const { setCurrentUser } = useUser();
   const [isStudent, setIsStudent] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const { setCurrentUser } = useUser(); // Use the UserContext to set the current user
   const navigate = useNavigate();
 
   const handleStudentChange = () => {
@@ -50,41 +30,55 @@ const PeerAssessment = () => {
 
   const handleSubmit = async () => {
     try {
-      // Determine the appropriate endpoint based on role
-      const endpoint = isInstructor ? 'http://localhost:5000/api/instructors/login' : 'http://localhost:5000/api/users/login';
-      
+      const endpoint = isInstructor
+        ? 'http://localhost:5000/api/instructors/login'
+        : 'http://localhost:5000/api/users/login';
+    
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-
+    
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
         alert(errorData?.message || 'Login failed');
         return;
       }
-
+    
       const data = await response.json();
-      console.log('Login successful:', data);
-
-      // Set the current user in context
-      setCurrentUser(data);
-
-      // Role checking logic
-      if (isInstructor) {
+      console.log('Login response data:', data); // Log to check the structure
+    
+      // Check if the response is for an instructor or student
+      if (data && data.instructor) {
+        const user = {
+          _id: data.instructor._id,  // Use instructor's _id
+          username: data.instructor.username,
+          role: 'instructor',  // Define the role as instructor
+        };
+        setCurrentUser(user); // Update the context with the instructor data
+        console.log('Instructor data set in context:', user);
         navigate('/instructor-page');
-      } else if (isStudent) {
+      } else if (data && data.student) {
+        const user = {
+          _id: data.student._id,  // Use student's _id
+          username: data.student.username,
+          role: 'student',  // Define the role as student
+        };
+        setCurrentUser(user); // Update the context with the student data
+        console.log('Student data set in context:', user);
         navigate('/student-page');
       } else {
-        alert('Role mismatch. Please ensure your selected role matches your credentials.');
+        console.log('Invalid user data:', data);
+        alert('Invalid user data received.');
       }
-
     } catch (error) {
       console.error('Error logging in:', error);
       alert('An error occurred during login.');
     }
   };
+  
+  
 
   return (
     <div className="peer-assessment">
@@ -116,8 +110,6 @@ const PeerAssessment = () => {
     </div>
   );
 };
-
-const InstructorPage = () => <GroupManagement isInstructor={true} />;
 
 const App = () => {
   return (
