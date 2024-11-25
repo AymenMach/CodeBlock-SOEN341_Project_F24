@@ -8,3 +8,108 @@
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+.peer-assessment-container h1 {
+  text-align: center;
+  font-size: 32px;
+  color: #00509e;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Back Button Styling */
+.back-button {
+  margin-bottom: 20px;
+  padding: 12px 20px;
+  background-color: #00509e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #003d80;
+  transform: scale(1.05);
+}
+
+/* Table Styling */
+.peer-assessment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.peer-assessment-table th, 
+.peer-assessment-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  color: #555;
+}
+
+.peer-assessment-table th {
+  background-color: #00509e;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.peer-assessment-table tr:hover {
+  background-color: #f1f8ff;
+}
+
+/* Input and Textarea Styling */
+.peer-assessment-table select, 
+.peer-assessment-table textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-top: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.peer-assessment-table select:focus, 
+.peer-assessment-table textarea:focus {
+  border-color: #00509e;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 80, 158, 0.3);
+}
+
+/* Button Styling */
+.peer-assessment-table button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.peer-assessment-table button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.peer-assessment-table button:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Empty State Styling */
+.peer-assessment-table td[colspan] {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+}
