@@ -44,3 +44,11 @@ Ensure the following are installed:
 Clone the repository using the following command:
 ```bash
 git clone https://github.com/your-repo/CodeBlock-SOEN341_Project_F24.git
+
+
+### **3. Install Dependencies**
+Navigate to the project folder and install the required dependencies:
+
+bash
+Copy code
+npm install
