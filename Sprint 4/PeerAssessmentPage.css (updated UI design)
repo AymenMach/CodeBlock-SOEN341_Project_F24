@@ -1,0 +1,10 @@
+/* General Page Styling */
+.peer-assessment-container {
+  margin: 30px auto;
+  max-width: 1200px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
