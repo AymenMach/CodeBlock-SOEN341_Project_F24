@@ -1,0 +1,116 @@
+/* General container styling for the detailed view */
+.detailed-view {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styling for the detailed view */
+.detailed-view-header {
+  font-size: 28px;
+  text-align: center;
+  color: #00509e;
+  margin-bottom: 20px;
+}
+
+/* Back button styling */
+.back-button {
+  padding: 10px 20px;
+  background-color: #00509e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #003d80;
+}
+
+/* Group container styling */
+.group-container {
+  margin-top: 30px;
+}
+
+.group-header {
+  font-size: 20px;
+  color: #444;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+/* Styling for tables in the detailed view */
+.assessment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.assessment-table th {
+  background-color: #00509e;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.assessment-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.assessment-table tr:hover {
+  background-color: #f1f8ff;
+}
+
+/* List styling inside table cells */
+.assessment-table td ul {
+  list-style-type: none; /* Remove default bullet points */
+  padding: 0;
+  margin: 0;
+}
+
+.assessment-table td ul li {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.assessment-table td ul li strong {
+  color: #00509e; /* Highlight strong elements */
+}
+
+/* No data or loading message styling */
+.loading-message,
+.no-data {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}
+
+/* Section headers (Groups with/without assessments) */
+.section-header {
+  font-size: 22px;
+  color: #00509e;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #00509e;
+  padding-bottom: 5px;
+}
+
+/* Styling for group details when no assessments are available */
+.no-assessments {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
+}
