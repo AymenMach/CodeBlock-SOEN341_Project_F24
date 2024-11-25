@@ -1,0 +1,104 @@
+/* Container for the entire page */
+.list-of-students-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Page Header */
+.list-of-students-container h1 {
+  text-align: center;
+  font-size: 32px;
+  color: #00509e;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for buttons */
+button.custom-button {
+  background-color: #00509e;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.custom-button:hover {
+  background-color: #003d80;
+  transform: scale(1.05);
+}
+
+button.custom-button:active {
+  background-color: #002b5c;
+  transform: scale(0.95);
+}
+
+/* Dropdown styles */
+select.custom-dropdown {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+select.custom-dropdown:focus {
+  border-color: #00509e;
+  outline: none;
+}
+
+/* Styling for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  color: #555;
+}
+
+th {
+  background-color: #00509e;
+  color: white;
+  font-weight: bold;
+}
+
+tr:hover {
+  background-color: #f1f8ff;
+}
+
+/* Message styling for empty state */
+.list-of-students-container p {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}
+
+/* No students message */
+.no-students-message {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 30px;
+}
