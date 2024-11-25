@@ -46,44 +46,37 @@ Clone the repository using the following command:
 git clone https://github.com/your-repo/CodeBlock-SOEN341_Project_F24.git
 ```
 
-3. Install Dependencies
+### **3. Install Dependencies**
 Navigate to the project folder and install the required dependencies:
+- **bash**
+- **Copy code**
+- **npm install**
 
-bash
-Copy code
-npm install
-
-4. Set Up Environment Variables
+### **4. Set Up Environment Variables**
 Create a .env file in the project root.
 Add the following variables:
-env
-Copy code
-MONGO_URI=your-mongo-connection-string
-PORT=5000
+- **env**
+- **Copy code**
+- **MONGO_URI=your-mongo-connection-string**
+- **PORT=5000**
 Ensure MongoDB is running on the specified connection.
 
-
-5. Add CSV Data
+### **5. Add CSV Data**
 Place the following CSV files in the data folder:
+- **roster.csv:** Contains student information with headers:
+    - username, password, name, role, studentId
+- **instructor.csv:** Contains instructor information with headers:
+    - username, password, name, role
 
-roster.csv: Contains student information with headers:
-username, password, name, role, studentId
-instructor.csv: Contains instructor information with headers:
-username, password, name, role
-
-
-6. Import Data
+## **6. Import Data**
 Run the server script to parse and import data into MongoDB:
+- **bash**
+- **Copy code**
+- **node server.js**
 
-bash
-Copy code
-node server.js
-
-
-7. Start the Server
+## **7. Start the Server**
 Start the project with:
-
-bash
-Copy code
-npm start
+- **bash**
+- **Copy code**
+- **npm start**
 By default, the app will run on http://localhost:5000.
