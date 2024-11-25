@@ -1,0 +1,132 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  color: #333;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.peer-assessment {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Logo Styles */
+.concordia-logo {
+  width: 150px;
+  margin-bottom: 20px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Heading */
+h1 {
+  font-size: 32px;
+  color: #00509e;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Styles */
+.credentials {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.credentials input {
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.credentials input:focus {
+  border-color: #74ebd5;
+  outline: none;
+  box-shadow: 0 0 5px rgba(116, 235, 213, 0.8);
+}
+
+.credentials button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 18px;
+  color: white;
+  background: #00509e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.credentials button:hover {
+  background: #003d80;
+  transform: scale(1.05);
+}
+
+.checkbox-group {
+  margin-top: 20px;
+}
+
+.checkbox-group label {
+  font-size: 18px;
+  margin: 8px 0;
+  color: #555;
+}
+
+/* Footer Style */
+footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .peer-assessment {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .credentials input,
+  .credentials button {
+    font-size: 14px;
+  }
+}
