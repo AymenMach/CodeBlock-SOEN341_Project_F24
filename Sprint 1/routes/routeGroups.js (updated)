@@ -1,0 +1,40 @@
+const express = require('express');
+const Group = require('../models/group'); 
+const router = express.Router();
+
+// Route to submit a peer assessment
+router.post('/:groupId/assess', async (req, res) => {
+  const { groupId } = req.params;
+  const { evaluatorId, evaluateeId, score, feedback } = req.body;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) return res.status(404).json({ message: 'Group not found' });
+
+    // Add the assessment to the evaluations array
+    group.evaluations.push({ evaluator: evaluatorId, evaluatee: evaluateeId, score, feedback });
+    await group.save();
+
+    res.status(200).json({ message: 'Evaluation submitted successfully' });
+  } catch (error) {
+    console.error('Error submitting assessment:', error);
+    res.status(500).json({ message: 'Error submitting assessment' });
+  }
+});
+
+// Route to get peer assessments for a group
+router.get('/:groupId/assessments', async (req, res) => {
+  const { groupId } = req.params;
+
+  try {
+    const group = await Group.findById(groupId).populate('evaluations.evaluator evaluations.evaluatee', 'username');
+    if (!group) return res.status(404).json({ message: 'Group not found' });
+
+    res.status(200).json(group.evaluations);
+  } catch (error) {
+    console.error('Error fetching assessments:', error);
+    res.status(500).json({ message: 'Error fetching assessments' });
+  }
+});
+
+module.exports = router;

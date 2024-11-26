@@ -1,0 +1,56 @@
+
+Meeting Title Sprint 3 - Meeting 1  
+Date: 1st Novemeber 2024
+Time: 11:30 AM - 1:15 PM  
+Sprint: Sprint 3  
+Meeting Number: 1  
+
+Attendees
+
+- Aymen Mahrouhi
+- Christopher Puran
+- Nihal Islam
+- Carlos Guevara
+- Mohamed Oubagha
+- Yazdan Syed
+
+---
+
+Agenda
+
+1. Recap of Sprint 2 achievements and review of outstanding tasks.
+2. Identification of user stories for Sprint 3.
+3. Task allocation and division of work.
+4. Discussion of implementation strategies for advanced peer assessment functionality.
+5. Documentation and front-end tasks.
+
+---
+
+ Discussion Details
+
+- 11:30 AM: Sprint 2 Recap and Sprint 3 Goals  
+  - Reviewed completed tasks and any remaining items from Sprint 2.
+  - Set primary objectives for Sprint 3 to ensure alignment with project milestones.
+
+- 11:45 AM User Story Identification for Sprint 3  
+  - Discussed and documented each user story required for Sprint 3, focusing on features such as enhanced authentication, instructor dashboard, and multi-dimensional peer assessment.
+
+- 12:00 PM Workforce Task Division  
+  - Assigned user stories and related tasks to each team member.
+  - Each task was recorded as a GitHub Issue, with user stories using the prefix "US.##" and specific tasks labeled "Task.##".
+
+- 1:15 PM: Peer Assessment and Front-End Implementation Discussion  
+  - Explored methods to implement advanced peer assessment functionality.
+  - Outlined an initial approach for the user interface and agreed to schedule a follow-up meeting to review progress.
+
+---
+
+#Action Items
+
+- Aymen Mahrouhi: Finalize user stories on GitHub / Draft updates for the README file for Sprint 3.
+- Christopher Puran: Set up GitHub Issues with the correct prefixes / Enhance back-end for additional peer assessment features.
+- Nihal Islam: Start initial development on multi-dimensional peer assessment / Assist with back-end functionality for the instructor dashboard.
+- Mohamed Oubagha:Begin setup for enhanced continuous integration / Sprint planning and workflow optimization.
+- Yazdan Syed: Document meeting minutes / Work on front-end design and implementation for the instructor dashboard and new assessment features.
+
+---
