@@ -1,0 +1,55 @@
+Meeting Minutes
+Meeting Title: Sprint 2 - Meeting 2
+Date: October 23, 2023
+Time: 4:00 PM - 5:00 PM
+Sprint: Sprint 2
+Meeting Number: 2
+
+
+Attendees:
+Aymen Mahrouhi
+Christopher Puran
+Nihal Islam
+Carlos Guevara
+Mohamed Oubagha
+Yazdan Syed
+
+
+Agenda:
+
+Database setup for group management.
+Design of group visibility on the student login page.
+Development of the peer assessment user interface.
+Database structure for storing peer assessments.
+Confirm page design and display for students.
+
+
+Discussion Details
+4:00 PM: Database Setup for Groups
+Discussed initial structure and requirements for creating a database to manage groups effectively.
+Determined fields and relationships necessary for group management in the database.
+
+4:15 PM: Student Group Visibility
+Reviewed design options for displaying assigned groups on the student login side of the web app.
+Agreed on making group information accessible and user-friendly for students.
+
+4:30 PM: Peer Assessment Interface Design
+Outlined the basic layout and components needed for the peer assessment interface.
+Established essential user interactions and determined that feedback functionality should be intuitive and clear.
+
+4:45 PM: Assessment Storage in Database
+Discussed how peer assessment data from students will be stored in the database.
+Agreed on a structure that ensures data integrity and efficient retrieval for instructor dashboards.
+
+5:00 PM: Confirmation Page Development
+Explored designs for the confirmation page, ensuring it provides clear feedback to students upon assessment submission.
+Agreed on a minimal, user-friendly layout that confirms successful submission.
+
+
+Action Items
+Aymen Mahrouhi: Finalize the database schema for group management.
+Christopher Puran: Begin development of group display on the student login page.
+Nihal Islam: Work on the initial layout for the peer assessment interface.
+Carlos Guevara: Implement data storage for assessments in the database.
+Mohamed Oubagha: Develop and style the confirmation page for the student interface.
+Yazdan Syed: Review and test database connections for the assessment storage.

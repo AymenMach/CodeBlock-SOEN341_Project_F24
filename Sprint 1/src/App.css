@@ -1,0 +1,142 @@
+.peer-assessment 
+{
+  text-align: center;
+  font-family: Arial, sans-serif;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo 
+{
+  position: absolute;
+}
+
+.concordia-logo 
+{
+  width: 200px;
+  top: 20px;
+  left: 20px;
+}
+
+.content 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 
+{
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.checkbox-group 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label 
+{
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+.credentials 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.credentials input 
+{
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+}
+
+.credentials button 
+{
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.group-management 
+{
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.create-group 
+{
+  margin-bottom: 20px;
+}
+
+.group 
+{
+  margin-top: 20px;
+}
+
+.group table 
+{
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 50%;
+}
+
+.group table, .group th, .group td 
+{
+  border: 1px solid black;
+}
+
+.group th, .group td 
+{
+  padding: 10px;
+  text-align: left;
+}
+
+.student-page 
+{
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.student-page .concordia-logo 
+{
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.student-page h1 
+{
+  font-size: 48px;
+}
+
+
+.App-link 
+{
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin 
+{
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

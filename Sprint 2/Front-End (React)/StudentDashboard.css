@@ -1,0 +1,17 @@
+.student-dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.student-dashboard h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.student-dashboard p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}

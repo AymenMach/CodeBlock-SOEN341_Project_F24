@@ -1,0 +1,42 @@
+.instructor-dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.instructor-dashboard h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.instructor-dashboard p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.group-management {
+  margin-bottom: 20px;
+}
+
+.group-input {
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.add-group-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.add-group-button:hover {
+  background-color: #45a049;
+}
