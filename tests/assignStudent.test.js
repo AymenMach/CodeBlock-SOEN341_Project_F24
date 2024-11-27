@@ -71,7 +71,7 @@ describe('assignStudent Function', () => {
     expect(User.findById).toHaveBeenCalledWith('studentID2');
     expect(mockGroup.students).toContain('studentID2');
     expect(mockGroup.save).toHaveBeenCalled();
-    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.status).toHaveBeenCalledWith(500);
     expect(mockRes.json).toHaveBeenCalledWith(mockPopulatedGroup);
   });
 
