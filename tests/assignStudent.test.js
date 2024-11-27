@@ -31,24 +31,7 @@ describe('assignStudent Function', () => {
     expect(mockRes.json).toHaveBeenCalledWith({ message: 'Group or student not found' });
   });
 
-  it('should return 400 if student is already in the group', async () => {
-    Group.findById.mockResolvedValueOnce({
-      students: ['studentID1'], // Student already exists in the group
-      save: jest.fn(),
-    });
-    User.findById.mockResolvedValueOnce({ _id: 'studentID1' });
-
-    mockReq.body = { groupID: 'groupID1', studentID: 'studentID1' };
-
-    await assignStudent(mockReq, mockRes);
-
-    expect(Group.findById).toHaveBeenCalledWith('groupID1');
-    expect(User.findById).toHaveBeenCalledWith('studentID1');
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Student already in group' });
-  });
-
-  it('should add a student to the group and return 200 with updated group', async () => {
+   it('should add a student to the group and return 200 with updated group', async () => {
     const mockGroup = {
       students: [],
       save: jest.fn().mockResolvedValueOnce(),
@@ -71,8 +54,25 @@ describe('assignStudent Function', () => {
     expect(User.findById).toHaveBeenCalledWith('studentID2');
     expect(mockGroup.students).toContain('studentID2');
     expect(mockGroup.save).toHaveBeenCalled();
-    expect(mockRes.status).toHaveBeenCalledWith(500);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith(mockPopulatedGroup);
+  });
+
+  it('should return 400 if student is already in the group', async () => {
+    Group.findById.mockResolvedValueOnce({
+      students: ['studentID1'], // Student already exists in the group
+      save: jest.fn(),
+    });
+    User.findById.mockResolvedValueOnce({ _id: 'studentID1' });
+
+    mockReq.body = { groupID: 'groupID1', studentID: 'studentID1' };
+
+    await assignStudent(mockReq, mockRes);
+
+    expect(Group.findById).toHaveBeenCalledWith('groupID1');
+    expect(User.findById).toHaveBeenCalledWith('studentID1');
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Student already in group' });
   });
 
   it('should return 500 if there is an error', async () => {
