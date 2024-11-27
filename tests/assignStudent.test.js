@@ -87,7 +87,7 @@ describe('assignStudent Function', () => {
   expect(mockRes.status).toHaveBeenCalledWith(200); 
   expect(mockRes.json).toHaveBeenCalledWith({
     students: [{ _id: 'studentID2', username: 'John Doe' }],
-  }); /
+  }); 
 });
 
   it('should return 500 if there is an error', async () => {
