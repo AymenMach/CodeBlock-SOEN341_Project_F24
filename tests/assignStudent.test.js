@@ -1,3 +1,4 @@
+// unit test controllers/CreateGroup.js -- assignStudent function
 const { assignStudent } = require('../controllers/CreateGroup'); 
 const Group = require('../models/group');
 const User = require('../models/User'); 
