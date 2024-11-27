@@ -1,3 +1,4 @@
+// unit test CreateGroup.js
 const { CreateGroup } = require('../controllers/CreateGroup');
 const Group = require('../models/Group');
 
