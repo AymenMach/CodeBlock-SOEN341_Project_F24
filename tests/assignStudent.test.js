@@ -1,6 +1,6 @@
 const { assignStudent } = require('../controllers/CreateGroup'); // Import assignStudent
-const Group = require('../models/group'); // Mocked Group model
-const User = require('../models/User'); // Mocked User model
+const Group = require('../models/group'); 
+const User = require('../models/User'); 
 
 jest.mock('../models/group', () => ({
   findById: jest.fn(),
@@ -33,7 +33,7 @@ describe('assignStudent Function', () => {
 
     await assignStudent(mockReq, mockRes);
 
-    expect(group.findById).toHaveBeenCalledWith('invalidGroupID');
+    expect(Group.findById).toHaveBeenCalledWith('invalidGroupID');
     expect(User.findById).toHaveBeenCalledWith('invalidStudentID');
     expect(mockRes.status).toHaveBeenCalledWith(404);
     expect(mockRes.json).toHaveBeenCalledWith({ message: 'Group or student not found' });
@@ -47,7 +47,7 @@ describe('assignStudent Function', () => {
 
     await assignStudent(mockReq, mockRes);
 
-    expect(group.findById).toHaveBeenCalledWith('groupID1');
+    expect(Group.findById).toHaveBeenCalledWith('groupID1');
     expect(User.findById).toHaveBeenCalledWith('studentID1');
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({ message: 'Student already in group' });
@@ -73,11 +73,11 @@ describe('assignStudent Function', () => {
 
     await assignStudent(mockReq, mockRes);
 
-    expect(group.findById).toHaveBeenCalledWith('groupID1');
+    expect(Group.findById).toHaveBeenCalledWith('groupID1');
     expect(User.findById).toHaveBeenCalledWith('studentID2');
     expect(mockGroup.students).toContain('studentID2');
     expect(mockGroup.save).toHaveBeenCalled();
-    expect(group.findById).toHaveBeenCalledTimes(2);
+    expect(Group.findById).toHaveBeenCalledTimes(2);
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({ students: [{ _id: 'studentID2', username: 'John Doe' }] });
   });
