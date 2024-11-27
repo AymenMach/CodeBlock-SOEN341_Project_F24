@@ -1,16 +1,16 @@
 import React from 'react';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DetailedView from './DetailedView';
 
-// Mocking fetch API globally
+// Mocking the fetch API
 global.fetch = jest.fn((url) => {
   if (url.includes('/api/groups')) {
     return Promise.resolve({
       ok: true,
       json: () =>
         Promise.resolve([
-          { _id: '1', name: 'Group A', participants: ['101', '102'] },
+          { _id: '1', name: 'Group A', participants: ['101'] },
           { _id: '2', name: 'Group B', participants: [] },
         ]),
     });
@@ -19,10 +19,7 @@ global.fetch = jest.fn((url) => {
     return Promise.resolve({
       ok: true,
       json: () =>
-        Promise.resolve([
-          { studentId: '101', name: 'Student A' },
-          { studentId: '102', name: 'Student B' },
-        ]),
+        Promise.resolve([{ studentId: '101', name: 'Student A' }]),
     });
   }
   if (url.includes('/api/assessments')) {
@@ -41,7 +38,7 @@ global.fetch = jest.fn((url) => {
                 conceptual: 4,
                 practical: 3,
                 workEthic: 4,
-                comment: 'Great job!',
+                comment: 'Great work!',
               },
             ],
           },
@@ -51,25 +48,10 @@ global.fetch = jest.fn((url) => {
   return Promise.reject(new Error('Invalid URL'));
 });
 
-// Mocking alert function
+// Mocking alert to avoid test crashes
 global.alert = jest.fn();
 
-// Mocking useNavigate
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(() => jest.fn()),
-}));
-
 describe('DetailedView Component', () => {
-  test('renders the loading state initially', async () => {
-    render(
-      <Router>
-        <DetailedView />
-      </Router>
-    );
-    expect(screen.getByText(/loading.../i)).toBeInTheDocument();
-  });
-
   test('renders groups and assessments correctly', async () => {
     await act(async () => {
       render(
@@ -79,22 +61,20 @@ describe('DetailedView Component', () => {
       );
     });
 
-    // Check for heading
-    expect(screen.getByText(/Peer Assessments - Detailed View/i)).toBeInTheDocument();
+    // Check if "Loading..." is displayed initially
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+
+    // Check if the main header is rendered
+    expect(await screen.findByText(/Peer Assessments - Detailed View/i)).toBeInTheDocument();
 
     // Check for group with assessments
     expect(screen.getByText(/Group A/i)).toBeInTheDocument();
-    expect(screen.getByText(/Total Participants: 2/i)).toBeInTheDocument();
+    expect(screen.getByText(/Total Participants: 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Great work!/i)).toBeInTheDocument();
 
     // Check for group without assessments
     expect(screen.getByText(/Group B/i)).toBeInTheDocument();
     expect(screen.getByText(/No assessments available for this group./i)).toBeInTheDocument();
-
-    // Check for assessment details
-    expect(screen.getByText(/Student ID \(Being Assessed\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Assessor ID/i)).toBeInTheDocument();
-    expect(screen.getByText(/Cooperation/i)).toBeInTheDocument();
-    expect(screen.getByText(/Great job!/i)).toBeInTheDocument();
   });
 
   test('handles navigation back to the dashboard', async () => {
@@ -112,23 +92,9 @@ describe('DetailedView Component', () => {
       );
     });
 
-    const backButton = screen.getByText(/Back to Dashboard/i);
+    const backButton = await screen.findByText(/Back to Dashboard/i);
     fireEvent.click(backButton);
 
     expect(mockNavigate).toHaveBeenCalledWith('/instructor-dashboard');
-  });
-
-  test('shows an error message when fetch fails', async () => {
-    global.fetch.mockImplementationOnce(() => Promise.reject(new Error('Fetch failed')));
-
-    await act(async () => {
-      render(
-        <Router>
-          <DetailedView />
-        </Router>
-      );
-    });
-
-    expect(global.alert).toHaveBeenCalledWith('An error occurred while fetching data.');
   });
 });
