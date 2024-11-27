@@ -1,5 +1,6 @@
-const { CreateGroup } = require('../../controllers/CreateGroup'); 
-const Group = require('../../models/group'); 
+const { CreateGroup } = require('../controllers/CreateGroup');
+const Group = require('../models/group');
+const User = require('../models/User');
 
 // Mock the Group model
 jest.mock('../../models/group', () => {
