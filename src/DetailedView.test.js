@@ -85,15 +85,12 @@ test('renders DetailedView component with group and assessment data', async () =
 });
 
 test('renders a message when no assessments are available', async () => {
-  global.fetch = jest.fn((url) => {
-    if (url.includes('/api/assessments')) {
-      return Promise.resolve({
+    global.fetch.mockImplementationOnce(() =>
+      Promise.resolve({
         ok: true,
-        json: () => Promise.resolve([]),
-      });
-    }
-    return fetch(url);
-  });
+        json: () => Promise.resolve([]), // No groups
+      })
+    );
 
   render(
     <Router>
