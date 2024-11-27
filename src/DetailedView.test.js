@@ -1,8 +1,8 @@
-// test file for CI pipeline
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import DetailedView from './DetailedView';
+import { act } from 'react';
 
 global.fetch = jest.fn((url) => {
   if (url.includes('/api/groups')) {
@@ -14,23 +14,34 @@ global.fetch = jest.fn((url) => {
   if (url.includes('/api/users')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve([{ studentId: '101', name: 'Student A' }, { studentId: '102', name: 'Student B' }]),
+      json: () => Promise.resolve([
+        { studentId: '101', name: 'Student A' },
+        { studentId: '102', name: 'Student B' },
+      ]),
     });
   }
   if (url.includes('/api/assessments')) {
     return Promise.resolve({
       ok: true,
       json: () => Promise.resolve([
-        { groupName: 'Group A', assessorId: '201', ratings: [{ memberId: '101', cooperation: 4 }] },
+        {
+          groupName: 'Group A',
+          assessorId: '201',
+          ratings: [{ memberId: '101', cooperation: 4, conceptual: 3, practical: 5, workEthic: 4 }],
+        },
       ]),
     });
   }
   return Promise.reject(new Error('Invalid URL'));
 });
 
+// Mock `alert`
+global.alert = jest.fn();
+
+// Mock `useNavigate`
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
+  useNavigate: jest.fn(() => jest.fn()),
 }));
 
 describe('DetailedView Component', () => {
@@ -45,15 +56,14 @@ describe('DetailedView Component', () => {
 
     expect(await screen.findByText(/Peer Assessments - Detailed View/i)).toBeInTheDocument();
     expect(await screen.findByText(/Group A/i)).toBeInTheDocument();
-    expect(await screen.findAllByText(/Total Participants:/i)).toHaveLength(1);
+    expect(await screen.findByText(/Total Participants:/i)).toBeInTheDocument();
   });
 
   test('renders a message when no assessments are available', async () => {
-    global.fetch.mockImplementationOnce(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve([]), // No groups
-      })
+    global.fetch.mockImplementationOnce((url) =>
+      url.includes('/api/assessments')
+        ? Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
+        : Promise.reject(new Error('Invalid URL'))
     );
 
     await act(async () => {
@@ -89,5 +99,3 @@ describe('DetailedView Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/instructor-dashboard');
   });
 });
-
-
