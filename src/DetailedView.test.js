@@ -7,37 +7,48 @@ global.fetch = jest.fn((url) => {
   if (url.includes('/api/groups')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve([{ _id: '1', name: 'Group A', participants: ['101', '102'] }]),
+      json: () =>
+        Promise.resolve([{ _id: '1', name: 'Group A', participants: ['101', '102'] }]),
     });
   }
   if (url.includes('/api/users')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve([
-        { studentId: '101', name: 'Student A' },
-        { studentId: '102', name: 'Student B' },
-      ]),
+      json: () =>
+        Promise.resolve([
+          { studentId: '101', name: 'Student A' },
+          { studentId: '102', name: 'Student B' },
+        ]),
     });
   }
   if (url.includes('/api/assessments')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve([
-        {
-          groupName: 'Group A',
-          assessorId: '201',
-          ratings: [{ memberId: '101', cooperation: 4, conceptual: 3, practical: 5, workEthic: 4 }],
-        },
-      ]),
+      json: () =>
+        Promise.resolve([
+          {
+            groupName: 'Group A',
+            assessorId: '201',
+            createdAt: '2023-11-01T12:00:00Z',
+            ratings: [
+              {
+                memberId: '101',
+                cooperation: 5,
+                conceptual: 4,
+                practical: 3,
+                workEthic: 4,
+                comment: 'Great work!',
+              },
+            ],
+          },
+        ]),
     });
   }
   return Promise.reject(new Error('Invalid URL'));
 });
 
-// Mock `alert`
 global.alert = jest.fn();
 
-// Mock `useNavigate`
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(() => jest.fn()),
@@ -56,6 +67,7 @@ describe('DetailedView Component', () => {
     expect(await screen.findByText(/Peer Assessments - Detailed View/i)).toBeInTheDocument();
     expect(await screen.findByText(/Group A/i)).toBeInTheDocument();
     expect(await screen.findByText(/Total Participants:/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Student A/i)).toBeInTheDocument();
   });
 
   test('renders a message when no assessments are available', async () => {
