@@ -32,4 +32,4 @@ jobs:
       run: npm run build --if-present
 
     - name: Run tests
-      run: npx jest tests/**/*.test.js # Explicitly run Jest for the tests folder
+      run: npx jest --testMatch '**/tests/**/*.test.js'
