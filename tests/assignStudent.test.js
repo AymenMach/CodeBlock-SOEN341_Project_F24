@@ -1,4 +1,4 @@
-const { assignStudent } = require('../controllers/CreateGroup'); // Import assignStudent
+const { assignStudent } = require('../controllers/CreateGroup'); 
 const Group = require('../models/group'); 
 const User = require('../models/User'); 
 
@@ -53,33 +53,42 @@ describe('assignStudent Function', () => {
     expect(mockRes.json).toHaveBeenCalledWith({ message: 'Student already in group' });
   });
 
-  it('should add a student to the group and return 200 with updated group', async () => {
-    const mockGroup = {
-      students: [],
-      save: jest.fn(),
-    };
+ it('should add a student to the group and return 200 with updated group', async () => {
+  // Mock group object
+  const mockGroup = {
+    students: [],
+    save: jest.fn().mockResolvedValueOnce(), 
+  };
 
-    const mockUpdatedGroup = {
-      students: ['studentID2'],
-      populate: jest.fn().mockResolvedValue({ students: [{ _id: 'studentID2', username: 'John Doe' }] }),
-    };
+  // Mock updated group after population
+  const mockPopulatedGroup = {
+    students: [{ _id: 'studentID2', username: 'John Doe' }],
+    populate: jest.fn().mockResolvedValueOnce({
+      students: [{ _id: 'studentID2', username: 'John Doe' }],
+    }),
+  };
 
-    Group.findById
-      .mockResolvedValueOnce(mockGroup)
-      .mockResolvedValueOnce(mockUpdatedGroup);
-    User.findById.mockResolvedValueOnce({ _id: 'studentID2' });
+  // Mock database calls
+  Group.findById
+    .mockResolvedValueOnce(mockGroup) 
+    .mockResolvedValueOnce(mockPopulatedGroup); 
+  User.findById.mockResolvedValueOnce({ _id: 'studentID2' }); 
 
-    mockReq.body = { groupID: 'groupID1', studentID: 'studentID2' };
+  // Set up request body
+  mockReq.body = { groupID: 'groupID1', studentID: 'studentID2' };
 
-    await assignStudent(mockReq, mockRes);
+  await assignStudent(mockReq, mockRes);
 
-    expect(Group.findById).toHaveBeenCalledWith('groupID1');
-    expect(User.findById).toHaveBeenCalledWith('studentID2');
-    expect(mockGroup.students).toContain('studentID2');
-    expect(mockGroup.save).toHaveBeenCalled();
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-    expect(mockRes.json).toHaveBeenCalledWith({ students: [{ _id: 'studentID2', username: 'John Doe' }] });
-  });
+  // Assertions
+  expect(Group.findById).toHaveBeenCalledWith('groupID1'); // Check group lookup
+  expect(User.findById).toHaveBeenCalledWith('studentID2'); // Check user lookup
+  expect(mockGroup.students).toContain('studentID2'); // student added
+  expect(mockGroup.save).toHaveBeenCalled();
+  expect(mockRes.status).toHaveBeenCalledWith(200); 
+  expect(mockRes.json).toHaveBeenCalledWith({
+    students: [{ _id: 'studentID2', username: 'John Doe' }],
+  }); /
+});
 
   it('should return 500 if there is an error', async () => {
     Group.findById.mockRejectedValueOnce(new Error('Database error'));
