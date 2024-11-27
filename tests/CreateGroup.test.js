@@ -17,7 +17,7 @@ jest.mock('../models/User', () => {
   };
 });
 
-describe('CreateGroup Function', () => {
+describe('createGroup Function', () => {
   let mockReq, mockRes;
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('CreateGroup Function', () => {
   });
 
   it('should return 400 if groupName is not provided', async () => {
-    await CreateGroup(mockReq, mockRes);
+    await createGroup(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({ message: 'Group name is required' });
   });
@@ -42,7 +42,7 @@ describe('CreateGroup Function', () => {
     const mockGroupInstance = { name: 'Test Group', save: jest.fn() };
     Group.mockImplementation(() => mockGroupInstance); // Mock Group constructor
 
-    await CreateGroup(mockReq, mockRes);
+    await createGroup(mockReq, mockRes);
 
     expect(Group).toHaveBeenCalledWith({ name: 'Test Group' });
     expect(mockGroupInstance.save).toHaveBeenCalled();
@@ -57,7 +57,7 @@ describe('CreateGroup Function', () => {
       throw new Error('Database error'); // Simulate error
     });
 
-    await CreateGroup(mockReq, mockRes);
+    await createGroup(mockReq, mockRes);
 
     expect(mockRes.status).toHaveBeenCalledWith(500);
     expect(mockRes.json).toHaveBeenCalledWith({ message: 'Error creating group' });
