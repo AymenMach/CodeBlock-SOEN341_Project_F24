@@ -1,4 +1,4 @@
-// Unit test controllers/CreateGroup.js
+// Unit test controllers/CreateGroup
 const { createGroup } = require('../controllers/CreateGroup'); 
 const Group = require('../models/group');
 const User = require('../models/User'); 
