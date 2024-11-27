@@ -1,13 +1,13 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DetailedView from './DetailedView';
 
-// Mock fetch
+// Mock fetch to prevent actual API calls
 global.fetch = jest.fn(() =>
   Promise.resolve({
     ok: true,
-    json: () => Promise.resolve([]), 
+    json: () => Promise.resolve([]), // Mock empty data
   })
 );
 
@@ -15,26 +15,28 @@ global.fetch = jest.fn(() =>
 global.alert = jest.fn();
 
 describe('DetailedView Component', () => {
-  test('renders loading state', () => {
+  test('renders loading state initially', () => {
     render(
       <Router>
         <DetailedView />
       </Router>
     );
 
-    // Check for loading text
+    // Expect the loading message to be displayed
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
   });
 
-  test('renders the header', async () => {
+  test('renders the header after loading', async () => {
     render(
       <Router>
         <DetailedView />
       </Router>
     );
 
-    // Check for header text
-    expect(await screen.findByText(/Peer Assessments - Detailed View/i)).toBeInTheDocument();
+    // Simulate fetch delay
+    await screen.findByText(/Peer Assessments - Detailed View/i);
+
+    // Expect the header to be present
+    expect(screen.getByText(/Peer Assessments - Detailed View/i)).toBeInTheDocument();
   });
 });
-
