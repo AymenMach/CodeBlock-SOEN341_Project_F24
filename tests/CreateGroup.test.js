@@ -1,12 +1,20 @@
 // Unit test CreateGroup
+const { CreateGroup } = require('../controllers/CreateGroup'); 
 const Group = require('../models/group');
-const User = require('../models/User');
+const User = require('../models/User'); 
 
 // Mock the Group model
-jest.mock('../../models/group', () => {
+jest.mock('../models/group', () => {
   return jest.fn().mockImplementation(() => ({
     save: jest.fn(), // Mock the save method
   }));
+});
+
+// Mock the User model if needed
+jest.mock('../models/User', () => {
+  return {
+    findById: jest.fn(), // Mock findById if needed in your tests
+  };
 });
 
 describe('CreateGroup Function', () => {
