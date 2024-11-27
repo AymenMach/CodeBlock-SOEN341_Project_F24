@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import DetailedView from './DetailedView';
-import { act } from 'react';
 
 global.fetch = jest.fn((url) => {
   if (url.includes('/api/groups')) {
