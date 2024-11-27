@@ -1,3 +1,4 @@
+// unit test controllers/intructorController
 const { loginInstructor } = require('../controllers/instructorController'); 
 const Instructor = require('../models/Instructor'); 
 
