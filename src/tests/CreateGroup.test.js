@@ -1,9 +1,9 @@
 // unit test CreateGroup.js
 const { CreateGroup } = require('../controllers/CreateGroup');
-const Group = require('../models/Group');
+const Group = require('../../models/Group');
 
 // Mock the Group model
-jest.mock('../models/Group');
+jest.mock('../../models/Group');
 
 describe('CreateGroup Function', () => {
   let mockReq, mockRes;
