@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import DetailedView from './DetailedView'; 
-import { BrowserRouter } from 'react-router-dom';
+const React = require('react');
+const { render, screen, waitFor } = require('@testing-library/react');
+const DetailedView = require('./DetailedView'); // Require your component
+const { BrowserRouter } = require('react-router-dom');
 
-
+// Mock the global fetch function
 global.fetch = jest.fn();
 
 describe('DetailedView Component', () => {
@@ -32,9 +32,11 @@ describe('DetailedView Component', () => {
       });
 
     render(
-      <BrowserRouter>
-        <DetailedView />
-      </BrowserRouter>
+      React.createElement(
+        BrowserRouter,
+        null,
+        React.createElement(DetailedView, null)
+      )
     );
 
     // Ensure loading state is displayed initially
@@ -57,20 +59,21 @@ describe('DetailedView Component', () => {
     });
 
     // Mock alert
-    window.alert = jest.fn();
+    global.alert = jest.fn();
 
     render(
-      <BrowserRouter>
-        <DetailedView />
-      </BrowserRouter>
+      React.createElement(
+        BrowserRouter,
+        null,
+        React.createElement(DetailedView, null)
+      )
     );
 
     // Wait for error handling
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(fetch).toHaveBeenCalledWith('http://localhost:5000/api/groups');
-      expect(window.alert).toHaveBeenCalledWith('An error occurred while fetching data.');
+      expect(global.alert).toHaveBeenCalledWith('An error occurred while fetching data.');
     });
   });
 });
-
