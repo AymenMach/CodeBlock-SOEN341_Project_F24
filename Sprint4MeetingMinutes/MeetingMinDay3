@@ -18,3 +18,24 @@ Verify user stories, acceptance tests, and documentation.
 Discuss feature integration and final testing.
 Prepare for Sprint 4 demo.
 
+Discussion Details:
+
+11:30 AM: Sprint 4 Deliverables Review
+
+Each member presented their completed tasks.
+Verified all user stories, tasks, and tests for completeness.
+11:45 AM: Documentation and Final Testing
+
+Confirmed that documentation was finalized and ready for submission.
+Reviewed results of static analysis and testing.
+12:15 PM: Feature Integration and Demo Prep
+
+Finalized feature integration to ensure a smooth demonstration.
+Discussed points to highlight during the demo.
+Action Items:
+
+Aymen Mahrouhi: Prepare summary of Sprint 4 user stories and tasks.
+Christopher Puran: Ensure back-end functionality is demo-ready.
+Nihal Islam: Verify testing outcomes and update the CI pipeline.
+Carlos Guevara: Finalize findings from static analysis and refactoring.
+Yazdan Syed: Complete final front-end adjustments and polish the UI.
