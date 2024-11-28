@@ -1,7 +1,7 @@
 // testing the submission assessment POST  
 const express = require('express');
-const router = require('./assessmentRoutes');
-const Assessment = require('../routes/assessments');
+const router = require('../routes/assessmentRoutes');
+const Assessment = require('../models/assessments');
 const group = require('../models/group');
 
 jest.mock('../models/assessments');
