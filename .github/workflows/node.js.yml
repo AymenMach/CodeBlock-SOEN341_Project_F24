@@ -32,4 +32,4 @@ jobs:
       run: npm run build --if-present
 
     - name: Run tests
-      run: npx jest tests/routegroups8.test.js
+      run: npx jest tests/routegroups9.test.js
