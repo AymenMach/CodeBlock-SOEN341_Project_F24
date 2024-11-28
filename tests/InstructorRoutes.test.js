@@ -1,3 +1,4 @@
+// testing for loginInstructor
 const { loginInstructor } = require('../controllers/instructorController'); // Mock the login controller
 
 jest.mock('../controllers/instructorController'); // Mock the loginInstructor controller
