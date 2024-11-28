@@ -1,5 +1,4 @@
 // testing for authorization
-const httpMocks = require('node-mocks-http');
 const { post } = require('../auth'); // Import the POST route handler
 const User = require('../models/User'); // Import the User model
 
