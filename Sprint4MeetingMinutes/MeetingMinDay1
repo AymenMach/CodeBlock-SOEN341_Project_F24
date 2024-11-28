@@ -12,7 +12,6 @@ Nihal Islam
 Carlos Guevara
 Yazdan Syed
 
-
 Agenda:
 
 Recap of Sprint 3 achievements and review of outstanding tasks.
@@ -20,3 +19,27 @@ Identification of user stories for Sprint 4.
 Task allocation and division of work.
 Discussion of bug fixes, static analysis, and refactoring strategies.
 Planning for feature integration and testing.
+
+Discussion Details:
+
+11:30 AM: Sprint 3 Recap and Sprint 4 Goals
+
+Reviewed completed tasks and any remaining items from Sprint 3.
+Set primary objectives for Sprint 4, focusing on bug fixes, refactoring, and finalizing features.
+11:45 AM: User Story Identification for Sprint 4
+
+Discussed and documented user stories required for Sprint 4.
+12:00 PM: Workforce Task Division
+
+Assigned user stories and tasks to team members.
+Recorded tasks in GitHub Issues, with user stories using the prefix "US.##".
+1:15 PM: Bug Fixes, Refactoring, and Testing Discussion
+
+Explored methods to address bugs and improve code using static analysis tools.
+Action Items:
+
+Aymen Mahrouhi: Finalize user stories on GitHub / Update the README for Sprint 4.
+Christopher Puran: Enhance back-end for bug fixes and feature completion.
+Nihal Islam: Work on unit tests and CI pipeline enhancements.
+Carlos Guevara: Conduct static analysis and document findings.
+Yazdan Syed: Document meeting minutes / Continue front-end work for instructor dashboard
