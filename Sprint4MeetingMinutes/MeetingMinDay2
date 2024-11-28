@@ -1,5 +1,5 @@
 Meeting Title: Sprint 4 - Meeting 2
-Date: [Insert Date, e.g., 12th November 2024]
+Date: 24th November 2024
 Time: 11:30 AM - 1:00 PM
 Sprint: Sprint 4
 Meeting Number: 2
@@ -17,3 +17,25 @@ Review progress on Sprint 4 tasks assigned in Meeting 1.
 Update on static analysis and refactoring progress.
 Discuss unit tests and CI pipeline improvements.
 Evaluate repository organization progress.
+
+
+Discussion Details:
+
+11:30 AM: Task Progress Review
+
+Each team member updated the group on their assigned tasks.
+Discussed progress and remaining issues for Sprint 4.
+11:45 AM: Static Analysis and Refactoring
+
+Reviewed initial findings from static analysis tools.
+Discussed strategies for resolving flagged issues.
+12:15 PM: Unit Testing and Repository Organization
+
+Ensured alignment on testing goals and repository structure.
+Action Items:
+
+Aymen Mahrouhi: Support front-end testing / Collaborate on repository reorganization.
+Christopher Puran: Finalize bug fixes and CI pipeline updates.
+Nihal Islam: Complete unit tests for all new features.
+Carlos Guevara: Conduct additional static analysis and assist with bug fixes.
+Yazdan Syed: Continue improving front-end components / Finalize documentation.
