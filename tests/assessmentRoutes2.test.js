@@ -1,3 +1,4 @@
+// test assessmentRoutes for GET submission
 const express = require('express');
 const request = require('supertest'); 
 const router = require('../routes/assessmentRoutes');
