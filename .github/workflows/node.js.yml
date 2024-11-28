@@ -32,4 +32,4 @@ jobs:
       run: npm run build --if-present
 
     - name: Run tests
-      run: npx jest tests/userRoutes.test.js
+      run: npx jest tests/userRoutes2.test.js
