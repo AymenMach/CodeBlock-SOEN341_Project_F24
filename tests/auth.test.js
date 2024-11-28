@@ -1,5 +1,4 @@
 // testing for authorization
-const { default: jest } = require('jest-mock');
 const express = require('express');
 const router = require('../routes/auth'); // Import the router
 const User = require('../models/User'); // Mock the User model
