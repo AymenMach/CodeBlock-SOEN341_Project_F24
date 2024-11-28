@@ -5,6 +5,7 @@ const router = express.Router();
 
 // Login endpoint for instructors
 router.post('/login', loginInstructor);
+
 router.get('/', async (req, res) => {
   try {
     const instructors = await Instructor.find(); 
