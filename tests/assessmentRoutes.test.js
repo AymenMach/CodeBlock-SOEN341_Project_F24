@@ -12,10 +12,10 @@ const app = express();
 app.use(express.json());
 app.use('/', router);
 
-describe('POST / - Submit Assessments) , () => {
+describe('POST / - Submit Assessments' , () => {
          it('should save assessment and return 201 on success', async () => {
            group.findbyId.mockResolvedValue({ id: '123', name: 'Test Group' });
-           Assessment.prototype.save = jest.fn().mockResolvedValue({ id: 'assessmentId' )};
+           Assessment.prototype.save = jest.fn().mockResolvedValue({ id: 'assessmentId' });
 
   const request = await response(app).post('/').send({
     groupId: '123',
