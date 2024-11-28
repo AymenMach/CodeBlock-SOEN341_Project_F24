@@ -1,9 +1,9 @@
 // testing for authorization
 const httpMocks = require('node-mocks-http');
 const { post } = require('../auth'); // Import the POST route handler
-const User = require('../models/user'); // Import the User model
+const User = require('../models/User'); // Import the User model
 
-jest.mock('../models/user'); // Mock the User model
+jest.mock('../models/User'); // Mock the User model
 
 describe('POST /login - User Authentication', () => {
   it('should return 200 and user details for valid credentials', async () => {
