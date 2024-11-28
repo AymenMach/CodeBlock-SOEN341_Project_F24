@@ -12,6 +12,7 @@ import SummaryView from './SummaryView';
 import { UserProvider, useUser } from './UserContext';
 import NavigationBar from './NavigationBar';
 import ListOfStudentsPage from './ListOfStudentsPage';
+import PeerAssessmentSettings from './PeerAssessmentSettings'; 
 
 const PrivateRoute = ({ children }) => {
   const { currentUser } = useUser();
@@ -159,6 +160,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <SummaryView />
+              </PrivateRoute>
+            }
+          />
+          <Route 
+            path="/instructor-dashboard/peer-assessments/settings" 
+            element={
+              <PrivateRoute>
+                <PeerAssessmentSettings />
               </PrivateRoute>
             }
           />

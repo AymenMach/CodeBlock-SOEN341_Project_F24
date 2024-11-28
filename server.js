@@ -8,6 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const assessmentRoutes = require('./routes/assessmentRoutes');
 const { parseCSVAndStoreData } = require('./utils/csvParser');
 const instructorRoutes = require('./routes/instructorRoutes');
+const settingRoutes = require('./routes/settingsRoutes');
 const { parseInstructorCSVAndStoreData } = require('./utils/csvParserInstructor');
 require('dotenv').config();
 const app = express();
@@ -15,6 +16,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/instructors', instructorRoutes);
+app.use(settingRoutes);
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => {

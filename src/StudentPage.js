@@ -7,6 +7,7 @@ const StudentPage = () => {
     const { currentUser } = useUser();
     const [groups, setGroups] = useState([]);
     const [users, setUsers] = useState([]);
+    const [peerAssessmentEnabled, setPeerAssessmentEnabled] = useState(true); 
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [refreshStatus, setRefreshStatus] = useState(null);
     const navigate = useNavigate();
@@ -14,7 +15,6 @@ const StudentPage = () => {
     const fetchGroups = async () => {
         try {
             const response = await fetch('http://localhost:5000/api/groups');
-
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Error fetching groups:', errorText);
@@ -44,24 +44,52 @@ const StudentPage = () => {
         }
     };
 
+    const fetchPeerAssessmentSetting = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/peer-assessment-settings');
+            if (!response.ok) {
+                throw new Error('Failed to fetch peer assessment settings');
+            }
+            const data = await response.json();
+            if (data.length > 0) {
+                const latestSettings = data[0]; 
+                setPeerAssessmentEnabled(latestSettings.isEnabled); 
+                localStorage.setItem('peerAssessmentEnabled', latestSettings.isEnabled); 
+            }
+        } catch (error) {
+            console.error('Error fetching peer assessment settings:', error);
+        }
+    };
+
     useEffect(() => {
         fetchGroups();
         fetchUsers();
+        fetchPeerAssessmentSetting(); 
     }, []);
 
     const handleRefresh = async () => {
         setIsRefreshing(true);
         setRefreshStatus(null);
 
-        await Promise.all([fetchGroups(), fetchUsers()]);
+        await Promise.all([fetchGroups(), fetchUsers(), fetchPeerAssessmentSetting()]); 
 
         setIsRefreshing(false);
         setRefreshStatus('success');
         setTimeout(() => setRefreshStatus(null), 2000);
     };
 
-    const handlePeerAssessment = (groupId) => {
-        navigate(`/peer-assessment/${groupId}`);
+    const handlePeerAssessment = async (groupId) => {
+        
+        const peerAssessmentSetting = localStorage.getItem('peerAssessmentEnabled');
+        const isEnabled = peerAssessmentSetting !== null ? JSON.parse(peerAssessmentSetting) : true;
+        
+        if (isEnabled) {
+            navigate(`/peer-assessment/${groupId}`);
+        } else {
+            
+            alert('Peer assessments are currently disabled. Please try again later.');
+            handleRefresh(); 
+        }
     };
 
     const getUserNameById = (id) => {
@@ -113,7 +141,7 @@ const StudentPage = () => {
                                     ))}
                                 </tbody>
                             </table>
-                            {isCurrentUserInGroup && (
+                            {isCurrentUserInGroup && peerAssessmentEnabled && (
                                 <button onClick={() => handlePeerAssessment(group._id)}>
                                     Peer Assessment
                                 </button>

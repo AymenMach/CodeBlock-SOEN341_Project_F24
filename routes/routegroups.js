@@ -3,7 +3,7 @@ const Group = require('../models/group');
 const User = require('../models/user');
 const router = express.Router();
 
-// Fetch all groups
+// fetch all groups
 router.get('/', async (req, res) => {
   try {
     const groups = await Group.find();
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route to get participants by group ID
+// route to get participants by group ID
 router.get('/:groupId/participants', async (req, res) => {
   const { groupId } = req.params;
 
@@ -30,7 +30,7 @@ router.get('/:groupId/participants', async (req, res) => {
   }
 });
 
-// Create a new group
+// create a new group
 router.post('/create', async (req, res) => {
   const { name } = req.body;
 
@@ -49,7 +49,7 @@ router.post('/create', async (req, res) => {
   }
 });
 
-// Assign students to a group
+// assign students to a group
 router.post('/assign', async (req, res) => {
   const { groupId, studentIds } = req.body;
 
@@ -73,7 +73,7 @@ router.post('/assign', async (req, res) => {
   }
 });
 
-// Add participants to a group
+// add participants to a group
 router.post('/add-participant', async (req, res) => {
   const { groupId, studentId } = req.body; 
 
@@ -83,12 +83,12 @@ router.post('/add-participant', async (req, res) => {
       return res.status(404).json({ message: 'Group not found' });
     }
 
-    // Check if the participant already exists
+    // participant already exists?
     if (group.participants.includes(studentId)) {
       return res.status(400).json({ message: 'Participant already exists in the group' });
     }
 
-    group.participants.push(studentId); // Push studentId
+    group.participants.push(studentId);
     await group.save();
     res.status(200).json(group);
   } catch (error) {
@@ -97,9 +97,9 @@ router.post('/add-participant', async (req, res) => {
   }
 });
 
-// Remove a participant from a group
+// remove participant from a group
 router.post('/remove-participant', async (req, res) => {
-  const { groupId, studentId } = req.body; // Change participantName to studentId
+  const { groupId, studentId } = req.body; 
 
   try {
     const group = await Group.findById(groupId);
@@ -107,12 +107,12 @@ router.post('/remove-participant', async (req, res) => {
       return res.status(404).json({ message: 'Group not found' });
     }
 
-    // Check if the participant exists in the group
+    // participant exists in the group?
     if (!group.participants.includes(studentId)) {
       return res.status(400).json({ message: 'Participant not found in the group' });
     }
 
-    // Remove the participant from the participants array
+    // remove participant
     group.participants = group.participants.filter(participant => participant !== studentId);
     await group.save();
     res.status(200).json(group);
