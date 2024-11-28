@@ -1,12 +1,22 @@
 // testing for authorization
-const { post } = require('../routes/auth'); // Import the POST route handler
-const User = require('../models/User'); // Import the User model
+const { default: jest } = require('jest-mock');
+const express = require('express');
+const router = require('../routes/auth'); // Import the router
+const User = require('../models/User'); // Mock the User model
 
 jest.mock('../models/User'); // Mock the User model
 
 describe('POST /login - User Authentication', () => {
+  let app;
+
+  beforeEach(() => {
+    // Create an Express app and use the router
+    app = express();
+    app.use(express.json());
+    app.use('/', router);
+  });
+
   it('should return 200 and user details for valid credentials', async () => {
-    // Mock valid user data
     const mockUser = {
       username: 'testuser',
       password: 'testpassword',
@@ -16,7 +26,6 @@ describe('POST /login - User Authentication', () => {
 
     User.findOne.mockResolvedValue(mockUser);
 
-    // Mock req and res objects
     const req = {
       body: {
         username: 'testuser',
@@ -35,9 +44,8 @@ describe('POST /login - User Authentication', () => {
       },
     };
 
-    // Call the route handler
-    await post(req, res);
-
+    // Use router.handle to simulate calling the login route
+    await router.handle(req, res);
     expect(res.statusCode).toBe(200);
     expect(res.data).toEqual({
       role: 'student',
@@ -71,8 +79,7 @@ describe('POST /login - User Authentication', () => {
       },
     };
 
-    await post(req, res);
-
+    await router.handle(req, res);
     expect(res.statusCode).toBe(401);
     expect(res.data).toEqual({ message: 'Invalid credentials' });
   });
@@ -98,9 +105,9 @@ describe('POST /login - User Authentication', () => {
       },
     };
 
-    await post(req, res);
-
+    await router.handle(req, res);
     expect(res.statusCode).toBe(500);
     expect(res.data).toEqual({ message: 'Server error' });
   });
 });
+
