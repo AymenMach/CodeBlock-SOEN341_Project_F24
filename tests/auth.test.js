@@ -1,5 +1,5 @@
 // testing for authorization
-const { post } = require('../auth'); // Import the POST route handler
+const { post } = require('../routes/auth'); // Import the POST route handler
 const User = require('../models/User'); // Import the User model
 
 jest.mock('../models/User'); // Mock the User model
