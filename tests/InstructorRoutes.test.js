@@ -3,6 +3,10 @@ const { loginInstructor } = require('../controllers/instructorController'); // M
 jest.mock('../controllers/instructorController'); // Mock the loginInstructor controller
 
 describe('POST /login - Instructor Login', () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Clear mock function calls before each test
+  });
+
   it('should call the loginInstructor controller successfully', async () => {
     const req = {
       body: {
