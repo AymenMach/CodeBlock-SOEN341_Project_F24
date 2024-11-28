@@ -3,7 +3,6 @@ const express = require('express');
 const router = require('../routes/assessmentRoutes');
 const Assessment = require('../models/assessments');
 const Group = require('../models/group');
-const { generateSummaryForGroup } = require('../routes/assessmentRoutes');
 
 jest.mock('../models/group'); 
 jest.mock('../models/assessments'); 
