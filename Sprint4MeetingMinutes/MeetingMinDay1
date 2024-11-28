@@ -4,6 +4,9 @@ Time: 11:30 AM - 1:15 PM
 Sprint: Sprint 4
 Meeting Number: 1
 
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
 Attendees:
 
 Aymen Mahrouhi
@@ -12,6 +15,8 @@ Nihal Islam
 Carlos Guevara
 Yazdan Syed
 
+---------------------------------------------------------------------------------------------------------------------------------------
+
 Agenda:
 
 Recap of Sprint 3 achievements and review of outstanding tasks.
@@ -19,6 +24,9 @@ Identification of user stories for Sprint 4.
 Task allocation and division of work.
 Discussion of bug fixes, static analysis, and refactoring strategies.
 Planning for feature integration and testing.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
 
 Discussion Details:
 
@@ -36,6 +44,9 @@ Recorded tasks in GitHub Issues, with user stories using the prefix "US.##".
 1:15 PM: Bug Fixes, Refactoring, and Testing Discussion
 
 Explored methods to address bugs and improve code using static analysis tools.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
 Action Items:
 
 Aymen Mahrouhi: Finalize user stories on GitHub / Update the README for Sprint 4.
