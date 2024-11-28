@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Assessment = require('../models/assessments'); 
 const Group = require('../models/group');  
-const Summary = require('../models/summary'); 
+const Summary = require('../models/Summary'); 
 
 // Route for submitting assessments (POST)
 router.post('/', async (req, res) => {
