@@ -124,5 +124,123 @@ describe('POST /assign - Assign Students to a Group', () => {
 
     await assignStudentsToGroup(req, res);
 
-    expect(r
+    expect(res.statusCode).toBe(404);
+    expect(res.data).toEqual({ message: 'Group not found' });
+    expect(Group.findById).toHaveBeenCalledWith('invalidGroupId');
+  });
+
+  it('should return 400 if some students are not found', async () => {
+    const req = {
+      body: {
+        groupId: '12345',
+        studentIds: ['101', '103'], // Mock one valid and one invalid student ID
+      },
+    }; // Mock the request object
+
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
+
+    const mockGroup = {
+      _id: '12345',
+      name: 'Group 1',
+      students: [],
+      save: jest.fn(),
+    };
+
+    const mockStudents = [{ studentId: '101', role: 'student' }]; // Only one valid student
+
+    Group.findById.mockResolvedValue(mockGroup); // Mock finding the group
+    User.find.mockResolvedValue(mockStudents); // Mock finding only one student
+
+    const assignStudentsToGroup = async (req, res) => {
+      const { groupId, studentIds } = req.body;
+
+      try {
+        const group = await Group.findById(groupId);
+        if (!group) {
+          return res.status(404).json({ message: 'Group not found' });
+        }
+
+        const students = await User.find({ studentId: { $in: studentIds }, role: 'student' });
+        if (students.length !== studentIds.length) {
+          return res.status(400).json({ message: 'Some students not found' });
+        }
+
+        group.students.push(...students.map(student => student.studentId));
+        await group.save();
+        res.status(200).json(group);
+      } catch (error) {
+        console.error('Error assigning students:', error);
+        res.status(500).json({ message: 'Error assigning students' });
+      }
+    };
+
+    await assignStudentsToGroup(req, res);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.data).toEqual({ message: 'Some students not found' });
+    expect(User.find).toHaveBeenCalledWith({ studentId: { $in: ['101', '103'] }, role: 'student' });
+  });
+
+  it('should return 500 if an error occurs during assignment', async () => {
+    const req = {
+      body: {
+        groupId: '12345',
+        studentIds: ['101', '102'],
+      },
+    }; // Mock the request object
+
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
+
+    Group.findById.mockRejectedValue(new Error('Database error')); // Mock findById to throw an error
+
+    const assignStudentsToGroup = async (req, res) => {
+      const { groupId, studentIds } = req.body;
+
+      try {
+        const group = await Group.findById(groupId);
+        if (!group) {
+          return res.status(404).json({ message: 'Group not found' });
+        }
+
+        const students = await User.find({ studentId: { $in: studentIds }, role: 'student' });
+        if (students.length !== studentIds.length) {
+          return res.status(400).json({ message: 'Some students not found' });
+        }
+
+        group.students.push(...students.map(student => student.studentId));
+        await group.save();
+        res.status(200).json(group);
+      } catch (error) {
+        console.error('Error assigning students:', error);
+        res.status(500).json({ message: 'Error assigning students' });
+      }
+    };
+
+    await assignStudentsToGroup(req, res);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.data).toEqual({ message: 'Error assigning students' });
+    expect(Group.findById).toHaveBeenCalledWith('12345');
+  });
+});
 
