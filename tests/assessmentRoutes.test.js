@@ -7,7 +7,7 @@ const { generateSummaryForGroup } = require('../routes/assessmentRoutes');
 
 jest.mock('../models/group'); 
 jest.mock('../models/assessments'); 
-jest.mock('../routes/assessmentRoutes', () => (
+jest.mock('../routes/assessmentRoutes', () => {
      const actualModule = jest.requireActual('../routes/assessmentRoutes');
      return { ...actualModule, generateSummaryForGroup: jest.fn(), };
 });
