@@ -3,6 +3,7 @@ const express = require('express');
 const router = require('../routes/assessmentRoutes');
 const Assessment = require('../models/assessments');
 const Group = require('../models/group');
+const request = require('supertest');
 
 jest.mock('../models/group'); 
 jest.mock('../models/assessments'); 
