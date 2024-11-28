@@ -1,10 +1,9 @@
 // testing for private route
-
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { UserProvider, useUser } from './UserContext'; 
-import PrivateRoute from './App'; 
+const React = require('react');
+const { render } = require('@testing-library/react');
+const { BrowserRouter, Route, Routes } = require('react-router-dom');
+const { useUser } = require('./UserContext'); 
+const PrivateRoute = require('./App').PrivateRoute; 
 
 jest.mock('./UserContext'); // Mock the UserContext
 
@@ -14,26 +13,32 @@ describe('PrivateRoute Component', () => {
   });
 
   it('should render children when the user is logged in', () => {
-    const MockChild = () => <div>Private Content</div>;
+    const MockChild = () => React.createElement('div', null, 'Private Content');
 
     useUser.mockReturnValue({ currentUser: { username: 'testuser' } });
 
-    render(
-      <UserProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<PrivateRoute><MockChild /></PrivateRoute>} />
-          </Routes>
-        </BrowserRouter>
-      </UserProvider>
+    const { getByText } = render(
+      React.createElement(
+        BrowserRouter,
+        null,
+        React.createElement(
+          Routes,
+          null,
+          React.createElement(
+            Route,
+            { path: '/', element: React.createElement(PrivateRoute, null, React.createElement(MockChild, null)) }
+          )
+        )
+      )
     );
 
-    expect(screen.getByText('Private Content')).toBeInTheDocument();
+    expect(getByText('Private Content')).toBeInTheDocument();
   });
 
   it('should redirect to the login page when the user is not logged in', () => {
-    const MockChild = () => <div>Private Content</div>;
+    const MockChild = () => React.createElement('div', null, 'Private Content');
     const mockNavigate = jest.fn();
+
     jest.mock('react-router-dom', () => ({
       ...jest.requireActual('react-router-dom'),
       useNavigate: () => mockNavigate,
@@ -42,13 +47,18 @@ describe('PrivateRoute Component', () => {
     useUser.mockReturnValue({ currentUser: null });
 
     render(
-      <UserProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<PrivateRoute><MockChild /></PrivateRoute>} />
-          </Routes>
-        </BrowserRouter>
-      </UserProvider>
+      React.createElement(
+        BrowserRouter,
+        null,
+        React.createElement(
+          Routes,
+          null,
+          React.createElement(
+            Route,
+            { path: '/', element: React.createElement(PrivateRoute, null, React.createElement(MockChild, null)) }
+          )
+        )
+      )
     );
 
     expect(mockNavigate).toHaveBeenCalledWith('/');
