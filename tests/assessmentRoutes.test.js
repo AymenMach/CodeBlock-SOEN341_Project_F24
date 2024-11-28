@@ -2,10 +2,13 @@
 const express = require('express');
 const router = require('../routes/assessmentRoutes');
 const Assessment = require('../models/assessments');
-const group = require('../models/group');
+const Group = require('../models/group');
+const { generateSummaryForGroup } = require('../routes/assessmentRoutes');
 
-jest.mock('../models/assessments');
-jest.mock('../models/group');
+jest.mock('../models/group'); 
+jest.mock('../models/assessments'); 
+jest.mock('../routes/assessmentRoutes', () => ({ ...jest.requireActual('../routes/assessmentRoutes'), generateSummaryForGroup: jest.fn(), })
+         );
 
 const app = express();
 app.use(express.json());
@@ -25,6 +28,7 @@ describe('POST / - Submit Assessments' , () => {
     expect(response.status).toBe(201);
     expect(response.body.groupId).toBe('123');
     expect(Assessment.prototype.save).toHaveBeenCalled();
+    expect(generateSummaryForGroup).toHaveBeenCalledWith('123', 'Test Group');
   });
 
   it('should return 400 if required fields are missing', async () => {
