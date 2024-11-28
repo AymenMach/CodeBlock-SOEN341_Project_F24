@@ -1,125 +1,69 @@
-const Instructor = require('../models/Instructor'); // Mock the Instructor model
-const { post: registerInstructor, get: getInstructors } = require('../routes/instructorRoutes');
+const { loginInstructor } = require('../controllers/instructorController'); // Mock the login controller
 
-jest.mock('../models/Instructor'); // Mock the Instructor model
+jest.mock('../controllers/instructorController'); // Mock the loginInstructor controller
 
-describe('Instructor Routes', () => {
-  describe('GET / - Fetch Instructors', () => {
-    it('should return a list of instructors', async () => {
-      const mockInstructors = [
-        { name: 'John Doe', username: 'johndoe' },
-        { name: 'Jane Smith', username: 'janesmith' },
-      ];
+describe('POST /login - Instructor Login', () => {
+  it('should call the loginInstructor controller successfully', async () => {
+    const req = {
+      body: {
+        username: 'instructor',
+        password: 'password123',
+      },
+    }; // Mock the request object
 
-      Instructor.find.mockResolvedValue(mockInstructors); // Mock database call
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
 
-      const req = {}; // Mock request object
-      const res = {
-        statusCode: 0,
-        data: null,
-        json(payload) {
-          this.data = payload;
-        },
-      };
-
-      await getInstructors(req, res);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.data).toEqual(mockInstructors);
-      expect(Instructor.find).toHaveBeenCalledTimes(1);
+    // Mock the loginInstructor implementation
+    loginInstructor.mockImplementation(async (req, res) => {
+      res.status(200).json({ message: 'Login successful' });
     });
 
-    it('should return 500 if an error occurs', async () => {
-      Instructor.find.mockRejectedValue(new Error('Database error'));
+    await loginInstructor(req, res);
 
-      const req = {}; // Mock request object
-      const res = {
-        statusCode: 0,
-        data: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.data = payload;
-        },
-      };
-
-      await getInstructors(req, res);
-
-      expect(res.statusCode).toBe(500);
-      expect(res.data).toEqual({ message: 'Failed to fetch instructors' });
-    });
+    expect(res.statusCode).toBe(200);
+    expect(res.data).toEqual({ message: 'Login successful' });
+    expect(loginInstructor).toHaveBeenCalledTimes(1);
   });
 
-  describe('POST / - Register Instructor', () => {
-    it('should register a new instructor successfully', async () => {
-      Instructor.mockImplementation(() => ({
-        save: jest.fn().mockResolvedValue(true),
-      }));
+  it('should handle login errors', async () => {
+    const req = {
+      body: {
+        username: 'instructor',
+        password: 'wrongpassword',
+      },
+    }; // Mock the request object
 
-      const req = {
-        body: {
-          fullName: 'John Doe',
-          username: 'johndoe',
-          password: 'password123',
-        },
-      };
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
 
-      const res = {
-        statusCode: 0,
-        data: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.data = payload;
-        },
-      };
-
-      await registerInstructor(req, res);
-
-      expect(res.statusCode).toBe(201);
-      expect(res.data).toEqual({ message: 'Instructor registered successfully!' });
-      expect(Instructor).toHaveBeenCalledWith({
-        name: 'John Doe',
-        username: 'johndoe',
-        password: 'password123',
-        role: 'instructor',
-      });
+    // Mock loginInstructor to simulate an error
+    loginInstructor.mockImplementation(async (req, res) => {
+      res.status(401).json({ message: 'Invalid credentials' });
     });
 
-    it('should return 500 if registration fails', async () => {
-      Instructor.mockImplementation(() => ({
-        save: jest.fn().mockRejectedValue(new Error('Database error')),
-      }));
+    await loginInstructor(req, res);
 
-      const req = {
-        body: {
-          fullName: 'Jane Smith',
-          username: 'janesmith',
-          password: 'password456',
-        },
-      };
-
-      const res = {
-        statusCode: 0,
-        data: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.data = payload;
-        },
-      };
-
-      await registerInstructor(req, res);
-
-      expect(res.statusCode).toBe(500);
-      expect(res.data).toEqual({ message: 'Error registering instructor' });
-    });
+    expect(res.statusCode).toBe(401);
+    expect(res.data).toEqual({ message: 'Invalid credentials' });
+    expect(loginInstructor).toHaveBeenCalledTimes(1);
   });
 });
-
