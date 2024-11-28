@@ -16,21 +16,30 @@ describe('POST /login - User Authentication', () => {
 
     User.findOne.mockResolvedValue(mockUser);
 
-    const req = httpMocks.createRequest({
-      method: 'POST',
-      url: '/login',
+    // Mock req and res objects
+    const req = {
       body: {
         username: 'testuser',
         password: 'testpassword',
       },
-    });
-    const res = httpMocks.createResponse();
+    };
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
 
     // Call the route handler
     await post(req, res);
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res._getData())).toEqual({
+    expect(res.data).toEqual({
       role: 'student',
       username: 'testuser',
       studentId: '12345',
@@ -44,38 +53,54 @@ describe('POST /login - User Authentication', () => {
       password: 'wrongpassword',
     });
 
-    const req = httpMocks.createRequest({
-      method: 'POST',
-      url: '/login',
+    const req = {
       body: {
         username: 'testuser',
         password: 'testpassword',
       },
-    });
-    const res = httpMocks.createResponse();
+    };
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
 
     await post(req, res);
 
     expect(res.statusCode).toBe(401);
-    expect(JSON.parse(res._getData())).toEqual({ message: 'Invalid credentials' });
+    expect(res.data).toEqual({ message: 'Invalid credentials' });
   });
 
   it('should return 500 for server errors', async () => {
     User.findOne.mockRejectedValue(new Error('Database error'));
 
-    const req = httpMocks.createRequest({
-      method: 'POST',
-      url: '/login',
+    const req = {
       body: {
         username: 'testuser',
         password: 'testpassword',
       },
-    });
-    const res = httpMocks.createResponse();
+    };
+    const res = {
+      statusCode: 0,
+      data: null,
+      status(code) {
+        this.statusCode = code;
+        return this;
+      },
+      json(payload) {
+        this.data = payload;
+      },
+    };
 
     await post(req, res);
 
     expect(res.statusCode).toBe(500);
-    expect(JSON.parse(res._getData())).toEqual({ message: 'Server error' });
+    expect(res.data).toEqual({ message: 'Server error' });
   });
 });
