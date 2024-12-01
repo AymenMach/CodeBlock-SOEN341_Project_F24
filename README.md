@@ -10,7 +10,6 @@ Christopher Puran (40006107) Responsible for the Back-End part of the project<br
 Nihal Islam (40242307)       Responsible for the Back-End part of the project<br/>
 Yazdan Syed (40221602)       Responsible for the Front-End part of the project<br/>
 Carlos Guevara (40227586)    Responsible for the Back-End part of the project<br/>
-Mohamed Oubagha (40248333)   Responsible for the Front-End part of the project<br/>
 
 Lab Session: Avi Jitendra Lad | LAB FT-X - (16:15 - 17:55)
 
