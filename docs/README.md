@@ -4,11 +4,11 @@ Fall 2024 Web Development Project - Concordia University
 ## Team Name: CodeBlock
 
 ### Team Members:
-- **Aymen Machrouhi (40250403):** Front-End Development
-- **Christopher Puran (40006107):** Back-End Development
-- **Nihal Islam (40242307):** Back-End Development
-- **Yazdan Syed (40221602):** 
-- **Carlos Guevara (40227586):** 
+- **(40250403), Aymen Machrouhi, AymenMach:** Front-End Development
+- **(40006107), Christopher Puran, ChristopherPuran:** Back-End Development
+- **(40242307), Nihal Islam, ImNotNihal:** Back-End Development
+- **(40221602), Yazdan Syed, Yazdan0112:** 
+- **(40227586), Carlos Guevara, carlos21guevara:** 
 
 ### Lab Session:
 Avi Jitendra Lad | LAB FT-X (16:15 - 17:55)
